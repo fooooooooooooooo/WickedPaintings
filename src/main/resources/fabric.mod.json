@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "wicked-paintings",
+  "version": "${version}",
+  "name": "Wicked Paintings",
+  "description": "WICKED paintings",
+  "authors": [
+    "fooooooooooooooo"
+  ],
+  "contact": {
+    "website": "https://github.com/fooooooooooooooo/WickedPaintings",
+    "repo": "https://github.com/fooooooooooooooo/WickedPaintings"
+  },
+  "license": "MIT",
+  "icon": "assets/wicked_paintings/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "ooo.foooooooooooo.wickedpaintings.mod.WickedPaintingsClient"
+    ],
+    "main": [
+      "ooo.foooooooooooo.wickedpaintings.mod.WickedPaintings"
+    ],
+    "modmenu": [
+      "ooo.foooooooooooo.wickedpaintings.client.ModMenuIntegration"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.18.1"
+  }
+}
