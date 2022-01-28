@@ -4,7 +4,7 @@ import net.fabricmc.loader.impl.util.log.Log;
 import net.fabricmc.loader.impl.util.log.LogCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.painting.PaintingEntity;
+import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -16,10 +16,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import ooo.foooooooooooo.wickedpaintings.item.ModItems;
-import ooo.foooooooooooo.wickedpaintings.network.packet.WickedPaintingSpawnS2CPacket;
 import org.jetbrains.annotations.Nullable;
 
-public class WickedPaintingEntity extends PaintingEntity {
+public class WickedPaintingEntity extends AbstractDecorationEntity {
   public String url = "";
 
   public int width = 16;
@@ -27,7 +26,7 @@ public class WickedPaintingEntity extends PaintingEntity {
   public Identifier identifier;
   public byte[] data;
 
-  public WickedPaintingEntity(EntityType<? extends PaintingEntity> entityType, World world) {
+  public WickedPaintingEntity(EntityType<? extends AbstractDecorationEntity> entityType, World world) {
     super(entityType, world);
   }
 
@@ -77,7 +76,17 @@ public class WickedPaintingEntity extends PaintingEntity {
         }
       }
 
-      this.dropItem(ModItems.WICKED_PAINTING);
+      var itemStack = new ItemStack(ModItems.WICKED_PAINTING);
+
+      var nbt = itemStack.getOrCreateNbt();
+      nbt.putString("Url", this.url);
+      nbt.putByte("Facing", (byte) this.facing.getHorizontal());
+      nbt.putInt("Width", this.width);
+      nbt.putInt("Height", this.height);
+      nbt.putString("Identifier", this.identifier.toString());
+      nbt.putByteArray("Data", this.data);
+
+      this.dropStack(itemStack);
     }
   }
 
@@ -89,8 +98,7 @@ public class WickedPaintingEntity extends PaintingEntity {
 
   @Override
   public Packet<?> createSpawnPacket() {
-    Log.info(LogCategory.LOG, "Sending spawn packet");
-    return WickedPaintingSpawnS2CPacket.createPacket(this);
+    return null;
   }
 
   @Override
@@ -106,6 +114,7 @@ public class WickedPaintingEntity extends PaintingEntity {
 
   public void readFromBuffer(PacketByteBuf buffer) {
     Log.info(LogCategory.LOG, "Reading painting from buffer");
+    Log.info(LogCategory.LOG, "bytes: " + buffer.readableBytes());
 
     this.url = buffer.readString();
     this.setFacing(Direction.fromHorizontal(buffer.readByte()));
@@ -125,4 +134,6 @@ public class WickedPaintingEntity extends PaintingEntity {
     buf.writeString(this.identifier.toString());
     buf.writeByteArray(this.data);
   }
+
+
 }

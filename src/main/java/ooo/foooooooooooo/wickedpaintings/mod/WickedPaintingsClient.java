@@ -9,6 +9,6 @@ import ooo.foooooooooooo.wickedpaintings.network.ClientBoundPacketHandlers;
 public class WickedPaintingsClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
-    ClientBoundPacketHandlers.init();
+    ClientBoundPacketHandlers.registerPacketHandlers();
   }
 }

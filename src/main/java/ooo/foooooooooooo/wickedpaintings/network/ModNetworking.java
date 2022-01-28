@@ -5,20 +5,12 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import ooo.foooooooooooo.wickedpaintings.network.packet.WickedPaintingSpawnS2CPacket;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Consumer;
 
 public class ModNetworking {
-  public static void registerPackets() {
-    ClientPlayNetworking.registerGlobalReceiver(
-        NetworkingConstants.WICKED_PAINTING_SPAWN_PACKET_ID,
-        WickedPaintingSpawnS2CPacket::onPacket
-    );
-  }
-
   public static IdentifiedPacket createClientBoundPacket(Identifier identifier, Consumer<ExtendedPacketBuffer> packetBufferConsumer) {
     var buf = PacketByteBufs.create();
     packetBufferConsumer.accept(new ExtendedPacketBuffer(buf));

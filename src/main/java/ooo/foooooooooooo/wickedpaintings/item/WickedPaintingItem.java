@@ -22,6 +22,8 @@ import ooo.foooooooooooo.wickedpaintings.entity.ModEntityTypes;
 import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
 import ooo.foooooooooooo.wickedpaintings.image.ImageLoaderManager;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,7 +45,19 @@ public class WickedPaintingItem extends DecorationItem {
   private void openClientGui(ItemStack stack) {
     var nbt = stack.getOrCreateNbt();
 
-    var url = "https://i.imgur.com/XqQXqQq.png";
+    byte[] data = new byte[]{};
+
+    var url = "https://i.imgur.com/removed.png";
+    try {
+      URL u = new URL(url);
+
+      try (InputStream in = u.openStream()) {
+        data = in.readAllBytes();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
 
     var id = ImageLoaderManager.LoadedImage.generateIdentifier(url);
     Identifier.CODEC
@@ -55,7 +69,7 @@ public class WickedPaintingItem extends DecorationItem {
     nbt.putString("Url", url);
     nbt.putInt("Width", 512);
     nbt.putInt("Height", 512);
-    nbt.putByteArray("Data", new byte[]{});
+    nbt.putByteArray("Data", data);
 
     MinecraftClient.getInstance().setScreen(new WickedScreen(stack));
   }

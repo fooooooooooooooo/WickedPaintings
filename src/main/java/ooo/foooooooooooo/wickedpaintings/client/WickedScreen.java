@@ -1,6 +1,5 @@
 package ooo.foooooooooooo.wickedpaintings.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
@@ -12,6 +11,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Arrays;
 
 public class WickedScreen extends Screen {
   private final String imageUrl;
@@ -20,9 +23,12 @@ public class WickedScreen extends Screen {
   private final Identifier imageIdentifier;
   private final byte[] imageBytes;
   private final ItemStack stack;
+  private final Logger logger;
+
 
   public WickedScreen(ItemStack itemStack) {
     super(Text.of("Wicked screen"));
+    this.logger = LogManager.getLogger(WickedScreen.class);
     this.stack = itemStack;
 
     var nbt = itemStack.getOrCreateNbt();
@@ -32,6 +38,18 @@ public class WickedScreen extends Screen {
     imageHeight = nbt.getInt("Height");
     imageIdentifier = Identifier.tryParse(nbt.getString("Identifier"));
     imageBytes = nbt.getByteArray("Data");
+
+    logger.info("imageUrl: " + imageUrl);
+    logger.info("imageWidth: " + imageWidth);
+    logger.info("imageHeight: " + imageHeight);
+    logger.info("imageIdentifier: " + imageIdentifier);
+
+    var length = Math.min(imageBytes.length, 25);
+
+    var firstBytes = new byte[length];
+    System.arraycopy(imageBytes, 0, firstBytes, 0, length);
+
+    logger.info("imageBytes: " + Arrays.toString(firstBytes));
   }
 
 

@@ -13,7 +13,6 @@ import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.config.ModConfig;
 import ooo.foooooooooooo.wickedpaintings.entity.ModEntityTypes;
 import ooo.foooooooooooo.wickedpaintings.item.ModItems;
-import ooo.foooooooooooo.wickedpaintings.network.ModNetworking;
 
 public class WickedPaintings implements ModInitializer {
   public static final String MOD_ID = "wicked_paintings";
@@ -28,6 +27,5 @@ public class WickedPaintings implements ModInitializer {
     AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
     ModEntityTypes.registerEntityTypes();
     ModItems.registerItems();
-    ModNetworking.registerPackets();
   }
 }
