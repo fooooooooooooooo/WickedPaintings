@@ -13,12 +13,10 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
-import ooo.foooooooooooo.wickedpaintings.image.ImageLoaderManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
@@ -26,7 +24,6 @@ public class ClientBoundPacketHandlers {
   private static final Logger logger = LoggerFactory.getLogger(ClientBoundPacketHandlers.class);
 
   public static void registerPacketHandlers() {
-    register(ClientBoundPackets.SYNC_IMAGES, ClientBoundPacketHandlers::onSyncImages);
     register(ClientBoundPackets.WICKED_PAINTING_SPAWN, ClientBoundPacketHandlers::onWickedPaintingSpawn);
   }
 
@@ -86,20 +83,6 @@ public class ClientBoundPacketHandlers {
         }
       }
     });
-  }
-
-
-  private static void onSyncImages(
-      MinecraftClient client,
-      ClientPlayNetworkHandler handler,
-      PacketByteBuf buffer,
-      PacketSender sender
-  ) {
-    List<ImageLoaderManager.LoadedImage> images =
-        new ExtendedPacketBuffer(buffer).readCodec(ImageLoaderManager.CODEC);
-
-    logger.info("Received {} images from server", images.size());
-//          client.execute(() -> ClientChunkManager.setLoadedChunks(images));
   }
 
 

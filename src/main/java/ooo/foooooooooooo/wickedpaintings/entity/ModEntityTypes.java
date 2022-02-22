@@ -1,5 +1,6 @@
 package ooo.foooooooooooo.wickedpaintings.entity;
 
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -7,7 +8,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import ooo.foooooooooooo.wickedpaintings.mod.WickedPaintings;
+import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
+import ooo.foooooooooooo.wickedpaintings.client.render.WickedPaintingEntityRenderer;
 
 public class ModEntityTypes {
   public static final EntityType<WickedPaintingEntity> WICKED_PAINTING =
@@ -20,6 +22,7 @@ public class ModEntityTypes {
 
   public static void registerEntityTypes() {
     register(new Identifier(WickedPaintings.MOD_ID, "wicked_painting"), WICKED_PAINTING);
+    EntityRendererRegistry.register(WICKED_PAINTING, WickedPaintingEntityRenderer::new);
   }
 
   private static <T extends Entity> void register(Identifier id, EntityType<T> type) {

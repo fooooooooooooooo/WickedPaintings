@@ -19,12 +19,10 @@ import ooo.foooooooooooo.wickedpaintings.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 
 public class WickedPaintingEntity extends AbstractDecorationEntity {
-  public String url = "";
-
-  public int width = 16;
-  public int height = 16;
-  public Identifier identifier;
-  public byte[] data;
+  private String url = "";
+  private int width = 16;
+  private int height = 16;
+  private Identifier identifier;
 
   public WickedPaintingEntity(EntityType<? extends AbstractDecorationEntity> entityType, World world) {
     super(entityType, world);
@@ -40,6 +38,14 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     return this.height;
   }
 
+  public String getUrl() {
+    return this.url;
+  }
+
+  public Identifier getIdentifier() {
+    return identifier;
+  }
+
   @Override
   public void writeCustomDataToNbt(NbtCompound nbt) {
     nbt.putString("Url", this.url);
@@ -47,7 +53,6 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     nbt.putInt("Width", this.width);
     nbt.putInt("Height", this.height);
     nbt.putString("Identifier", this.identifier.toString());
-    nbt.putByteArray("Data", this.data);
 
     super.writeCustomDataToNbt(nbt);
   }
@@ -59,7 +64,6 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     this.width = nbt.getInt("Width");
     this.height = nbt.getInt("Height");
     this.identifier = Identifier.tryParse(nbt.getString("Identifier"));
-    this.data = nbt.getByteArray("Data");
 
     super.readCustomDataFromNbt(nbt);
     this.setFacing(this.facing);
@@ -68,6 +72,7 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
   @Override
   public void onBreak(@Nullable Entity entity) {
     Log.info(LogCategory.LOG, "Painting broken");
+
     if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
       this.playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0F, 1.0F);
       if (entity instanceof PlayerEntity playerEntity) {
@@ -84,7 +89,6 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
       nbt.putInt("Width", this.width);
       nbt.putInt("Height", this.height);
       nbt.putString("Identifier", this.identifier.toString());
-      nbt.putByteArray("Data", this.data);
 
       this.dropStack(itemStack);
     }
@@ -121,7 +125,6 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     this.width = buffer.readInt();
     this.height = buffer.readInt();
     this.identifier = Identifier.tryParse(buffer.readString());
-    this.data = buffer.readByteArray();
   }
 
   public void writeToBuffer(PacketByteBuf buf) {
@@ -132,8 +135,5 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     buf.writeInt(this.getWidthPixels());
     buf.writeInt(this.getHeightPixels());
     buf.writeString(this.identifier.toString());
-    buf.writeByteArray(this.data);
   }
-
-
 }

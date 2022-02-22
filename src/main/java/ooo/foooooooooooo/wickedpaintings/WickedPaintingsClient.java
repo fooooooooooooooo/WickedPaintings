@@ -1,4 +1,4 @@
-package ooo.foooooooooooo.wickedpaintings.mod;
+package ooo.foooooooooooo.wickedpaintings;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;

@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "ooo.foooooooooooo.wickedpaintings.mod.WickedPaintingsClient"
+      "ooo.foooooooooooo.wickedpaintings.WickedPaintingsClient"
     ],
     "main": [
-      "ooo.foooooooooooo.wickedpaintings.mod.WickedPaintings"
+      "ooo.foooooooooooo.wickedpaintings.WickedPaintings"
     ],
     "modmenu": [
       "ooo.foooooooooooo.wickedpaintings.client.ModMenuIntegration"

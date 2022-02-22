@@ -3,7 +3,7 @@ package ooo.foooooooooooo.wickedpaintings.item;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import ooo.foooooooooooo.wickedpaintings.mod.WickedPaintings;
+import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 
 public class ModItems {
   public static final Item WICKED_PAINTING = new WickedPaintingItem(defaultSettings());

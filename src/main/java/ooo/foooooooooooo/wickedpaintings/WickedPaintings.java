@@ -1,4 +1,4 @@
-package ooo.foooooooooooo.wickedpaintings.mod;
+package ooo.foooooooooooo.wickedpaintings;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
@@ -13,6 +13,8 @@ import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.config.ModConfig;
 import ooo.foooooooooooo.wickedpaintings.entity.ModEntityTypes;
 import ooo.foooooooooooo.wickedpaintings.item.ModItems;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WickedPaintings implements ModInitializer {
   public static final String MOD_ID = "wicked_paintings";
@@ -20,11 +22,17 @@ public class WickedPaintings implements ModInitializer {
       new Identifier(MOD_ID, "general"),
       () -> new ItemStack(Items.PAINTING)
   );
+  public static Logger LOGGER;
+
+  public WickedPaintings() {
+    LOGGER = LoggerFactory.getLogger(WickedPaintings.class);
+  }
 
   @Override
   public void onInitialize() {
     Log.info(LogCategory.LOG, "Initializing Wicked Paintings");
     AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
+
     ModEntityTypes.registerEntityTypes();
     ModItems.registerItems();
   }
