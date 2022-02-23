@@ -20,7 +20,7 @@ public class WickedPaintings implements ModInitializer {
   public static final String MOD_ID = "wicked_paintings";
   public static final ItemGroup DEFAULT_GROUP = FabricItemGroupBuilder.build(
       new Identifier(MOD_ID, "general"),
-      () -> new ItemStack(Items.PAINTING)
+      () -> new ItemStack(ModItems.WICKED_PAINTING)
   );
   public static Logger LOGGER;
 

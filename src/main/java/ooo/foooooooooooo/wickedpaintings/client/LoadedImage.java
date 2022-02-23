@@ -1,113 +1,78 @@
 package ooo.foooooooooooo.wickedpaintings.client;
 
-import net.minecraft.client.texture.NativeImage;
 import net.minecraft.util.Identifier;
-import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 public final class LoadedImage {
-  private final Identifier identifier;
-  private final String url;
-  private final int width;
-  private final int height;
-  private final byte[] data;
-  private final NativeImage image;
+    private final Identifier imageId;
+    private final String url;
+    private final int width;
+    private final int height;
+    private final BufferedImage image;
 
-  public LoadedImage(
-      Identifier identifier,
-      String url,
-      int width,
-      int height,
-      byte[] data
-  ) {
-    this.identifier = identifier;
-    this.url = url;
-    this.width = width;
-    this.height = height;
-    this.data = data;
-
-    NativeImage image = null;
-
-    try {
-      image = NativeImage.read(ByteBuffer.wrap(data));
-    } catch (IOException e) {
-      WickedPaintings.LOGGER.error("Failed to load image: " + url, e);
+    public LoadedImage(
+            Identifier imageId,
+            String url,
+            BufferedImage image
+    ) {
+        this.imageId = imageId;
+        this.url = url;
+        this.width = image.getWidth();
+        this.height = image.getHeight();
+        this.image = image;
     }
 
-    this.image = image;
-  }
+    @NotNull
+    public Identifier getTextureId() {
+        if (this.imageId == null) {
+            return new Identifier("wicked_image", "fucked_up");
+        }
+        return this.imageId;
+    }
 
-  public Identifier getIdentifier() {
-    return this.identifier;
-  }
+    public String getUrl() {
+        return this.url;
+    }
 
-  public String getUrl() {
-    return this.url;
-  }
+    public int getWidth() {
+        return this.width;
+    }
 
-  public int getWidth() {
-    return this.width;
-  }
+    public int getHeight() {
+        return this.height;
+    }
 
-  public int getHeight() {
-    return this.height;
-  }
+    public BufferedImage getImage() {
+        return this.image;
+    }
 
-  public byte[] getData() {
-    return this.data;
-  }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (LoadedImage) obj;
+        return Objects.equals(this.imageId, that.imageId) &&
+                Objects.equals(this.url, that.url) &&
+                this.width == that.width &&
+                this.height == that.height &&
+                this.image == that.image;
+    }
 
-  public Identifier identifier() {
-    return identifier;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(imageId, url, width, height, image);
+    }
 
-  public String url() {
-    return url;
-  }
-
-  public int width() {
-    return width;
-  }
-
-  public int height() {
-    return height;
-  }
-
-  public byte[] data() {
-    return data;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) return true;
-    if (obj == null || obj.getClass() != this.getClass()) return false;
-    var that = (LoadedImage) obj;
-    return Objects.equals(this.identifier, that.identifier) &&
-        Objects.equals(this.url, that.url) &&
-        this.width == that.width &&
-        this.height == that.height &&
-        Objects.equals(this.data, that.data);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(identifier, url, width, height, data);
-  }
-
-  @Override
-  public String toString() {
-    return "LoadedImage[" +
-        "identifier=" + identifier + ", " +
-        "url=" + url + ", " +
-        "width=" + width + ", " +
-        "height=" + height + ", " +
-        "data=" + data + ']';
-  }
-
-  public NativeImage getImage() {
-    return image;
-  }
+    @Override
+    public String toString() {
+        return "LoadedImage[" +
+                "identifier=" + imageId + ", " +
+                "url=" + url + ", " +
+                "width=" + width + ", " +
+                "height=" + height + ", " +
+                "image=" + image + "]";
+    }
 }

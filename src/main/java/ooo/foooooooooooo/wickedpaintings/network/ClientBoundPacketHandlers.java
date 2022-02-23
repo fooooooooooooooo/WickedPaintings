@@ -75,8 +75,8 @@ public class ClientBoundPacketHandlers {
 
           e.readFromBuffer(buffer);
 
-          logger.info("identifier: " + e.identifier);
-          logger.info("url: " + e.url);
+          logger.info("identifier: " + e.getImageId());
+          logger.info("url: " + e.getUrl());
           world.addEntity(entityID, e);
         } else {
           world.addEntity(entityID, entity);
