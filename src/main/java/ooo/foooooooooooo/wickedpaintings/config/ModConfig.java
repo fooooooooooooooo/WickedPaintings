@@ -6,5 +6,5 @@ import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 
 @Config(name = WickedPaintings.MOD_ID)
 public class ModConfig implements ConfigData {
-  public String sayHi = "Hello World!";
+    // TODO: Add config options
 }

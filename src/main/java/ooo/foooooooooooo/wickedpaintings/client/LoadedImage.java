@@ -2,34 +2,44 @@ package ooo.foooooooooooo.wickedpaintings.client;
 
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
-public final class LoadedImage {
-    private final Identifier imageId;
+public class LoadedImage {
+    public static final LoadedImage DEFAULT = new LoadedImage(ImageManager.DEFAULT_IMAGE_ID, "", null);
     private final String url;
     private final int width;
     private final int height;
     private final BufferedImage image;
+    private final Identifier imageId;
 
     public LoadedImage(
             Identifier imageId,
             String url,
-            BufferedImage image
+            @Nullable BufferedImage image
     ) {
         this.imageId = imageId;
         this.url = url;
-        this.width = image.getWidth();
-        this.height = image.getHeight();
+
+        if (image == null) {
+            this.width = 0;
+            this.height = 0;
+        } else {
+            this.width = image.getWidth();
+            this.height = image.getHeight();
+        }
+
         this.image = image;
     }
 
     @NotNull
     public Identifier getTextureId() {
         if (this.imageId == null) {
-            return new Identifier("wicked_image", "fucked_up");
+            return ImageManager.DEFAULT_IMAGE_ID;
         }
+
         return this.imageId;
     }
 
@@ -45,6 +55,7 @@ public final class LoadedImage {
         return this.height;
     }
 
+    @Nullable
     public BufferedImage getImage() {
         return this.image;
     }

@@ -4,9 +4,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 
 public class WickedSpawnPacket extends EntitySpawnS2CPacket {
+    private final Direction facing;
     private final String url;
     private final int width;
     private final int height;
@@ -14,18 +16,15 @@ public class WickedSpawnPacket extends EntitySpawnS2CPacket {
 
     public WickedSpawnPacket(Entity entity, String url, int width, int height, Identifier imageId) {
         super(entity);
+
+        this.facing = entity.getHorizontalFacing();
+
         this.url = url;
+
         this.width = width;
         this.height = height;
-        this.imageId = imageId;
-    }
 
-    public WickedSpawnPacket(PacketByteBuf buf) {
-        super(buf);
-        this.url = buf.readString();
-        this.width = buf.readInt();
-        this.height = buf.readInt();
-        this.imageId = buf.readIdentifier();
+        this.imageId = imageId;
     }
 
     @Override
@@ -39,12 +38,18 @@ public class WickedSpawnPacket extends EntitySpawnS2CPacket {
         buf.writeByte(this.getPitch());
         buf.writeByte(this.getYaw());
         buf.writeInt(this.getEntityData());
+
         buf.writeShort((int) this.getVelocityX());
         buf.writeShort((int) this.getVelocityY());
         buf.writeShort((int) this.getVelocityZ());
+
+        buf.writeByte(this.getFacing().getHorizontal());
+
         buf.writeString(this.url);
+
         buf.writeInt(this.width);
         buf.writeInt(this.height);
+
         buf.writeIdentifier(this.imageId);
     }
 
@@ -62,5 +67,9 @@ public class WickedSpawnPacket extends EntitySpawnS2CPacket {
 
     public Identifier getImageId() {
         return imageId;
+    }
+
+    public Direction getFacing() {
+        return this.facing;
     }
 }

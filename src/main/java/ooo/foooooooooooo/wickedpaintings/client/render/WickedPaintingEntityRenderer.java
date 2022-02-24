@@ -8,9 +8,7 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
-import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
 import org.lwjgl.opengl.GL11;
@@ -25,30 +23,26 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     public void render(WickedPaintingEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         var image = ImageManager.loadImage(entity.getImageId(), entity.getUrl());
 
-        if (image == null) {
-            image = ImageManager.loadImage(new Identifier("wicked_images", "cumata"), "https://cdn.discordapp.com/attachments/902081288645804042/945872405581164544/lumuta.png");
-        }
-
-        if (image == null) {
-            WickedPaintings.LOGGER.error("Failed to load default image");
-            return;
-        }
-
         var imageId = image.getTextureId();
 
-        float pitch = entity.getPitch();
-        float y = entity.getYaw();
+        float entityPitch = entity.getPitch();
+        float entityYaw = entity.getYaw();
+
+        var w = entity.getRealWidth();
+        var h = entity.getRealHeight();
 
         matrices.push();
 
-        matrices.multiply(new Quaternion(180 - pitch, y, 0, true));
-//        matrices.translate(-0.5d, -0.5, -0.5d / 16d);
-        matrices.translate(-0.5d, -0.5, 0);
+        matrices.multiply(new Quaternion(180 - entityPitch, entityYaw, 0, true));
 
+        var xTrans = -w / 2f;
+        var yTrans = -h / 2f;
+
+        matrices.translate(xTrans, yTrans, 0);
 
         RenderSystem.setShaderTexture(0, imageId);
 
-        this.drawTexture(matrices, 0, 0, 0, 0f, 0f, 1, 1, 1, 1);
+        this.drawTexture(matrices, 0, 0, 0, 0f, 0f, w, h, w, h);
 
         matrices.pop();
     }
@@ -83,8 +77,6 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
 
     @Override
     public Identifier getTexture(WickedPaintingEntity entity) {
-        var image = ImageManager.loadImage(entity.getImageId(), entity.getUrl());
-        if (image == null) return new Identifier("wicked_image", "fucked_up");
-        return image.getTextureId();
+        return ImageManager.loadImage(entity.getImageId(), entity.getUrl()).getTextureId();
     }
 }

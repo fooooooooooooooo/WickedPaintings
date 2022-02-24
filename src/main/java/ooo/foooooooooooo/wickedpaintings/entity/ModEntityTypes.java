@@ -1,5 +1,7 @@
 package ooo.foooooooooooo.wickedpaintings.entity;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
@@ -23,6 +25,10 @@ public class ModEntityTypes {
 
     public static void registerEntityTypes() {
         register(new Identifier(WickedPaintings.MOD_ID, "wicked_painting"), WICKED_PAINTING);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void registerRenderers() {
         EntityRendererRegistry.register(WICKED_PAINTING, WickedPaintingEntityRenderer::new);
     }
 

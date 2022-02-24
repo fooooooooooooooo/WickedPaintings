@@ -3,22 +3,29 @@ package ooo.foooooooooooo.wickedpaintings.client;
 import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 import ooo.foooooooooooo.wickedpaintings.util.ImageUtils;
-import org.apache.commons.codec.binary.Base32;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ImageManager {
+    public static final String IMAGES_NAMESPACE = "wicked_images";
+    public static final Identifier DEFAULT_IMAGE_ID = new Identifier(IMAGES_NAMESPACE, "default");
+    private static final ImageManager instance = new ImageManager();
     private final List<LoadedImage> loadedImages = new ArrayList<>();
 
-    private static final ImageManager instance = new ImageManager();
+    @NotNull
+    public static LoadedImage loadImage(String url) {
+        var identifier = generateIdentifier(url);
 
-    @Nullable
+        return loadImage(identifier, url);
+    }
+
+    @NotNull
     public static LoadedImage loadImage(Identifier id, String url) {
         var validatedUrl = "";
 
@@ -29,11 +36,7 @@ public class ImageManager {
             validatedUrl = null;
         }
 
-        if (validatedUrl == null) return null;
-
-        if (id == null) {
-            id = generateIdentifier(url);
-        }
+        if (validatedUrl == null) return LoadedImage.DEFAULT;
 
         for (LoadedImage loadedImage : instance.loadedImages) {
             if (loadedImage.getUrl().equals(url)) {
@@ -45,14 +48,14 @@ public class ImageManager {
         try {
             image = ImageUtils.downloadBufImage(url);
         } catch (IOException e) {
-            WickedPaintings.LOGGER.error("Failed to load image: " + url + "\n  Exception: " + e.getMessage());
-            return null;
+            WickedPaintings.LOGGER.error("Failed to download image: " + url + ", Exception: " + e.getMessage());
+            return LoadedImage.DEFAULT;
         }
 
         try {
             ImageUtils.saveBufferedImageAsIdentifier(image, id);
         } catch (IOException e) {
-            WickedPaintings.LOGGER.error("Failed to save image as texture: " + url + "\n  Exception: " + e.getMessage());
+            WickedPaintings.LOGGER.error("Failed to save image as texture: " + url + ", Exception: " + e.getMessage());
         }
 
         var loadedImage = new LoadedImage(id, url, image);
@@ -60,15 +63,12 @@ public class ImageManager {
         instance.loadedImages.add(loadedImage);
 
         return loadedImage;
-
     }
 
     public static Identifier generateIdentifier(String url) {
-        var bytes = new Base32().encode(url.getBytes(StandardCharsets.UTF_8));
+        var hash = url.hashCode();
+        var encoded = Integer.toHexString(hash);
 
-        var encoded = new String(bytes, StandardCharsets.UTF_8)
-                .replaceAll("=", "").toLowerCase();
-
-        return new Identifier("wicked_images", encoded);
+        return new Identifier(IMAGES_NAMESPACE, encoded.toLowerCase(Locale.ROOT));
     }
 }
