@@ -18,6 +18,7 @@ import ooo.foooooooooooo.wickedpaintings.NbtConstants;
 import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.item.ModItems;
+import ooo.foooooooooooo.wickedpaintings.network.WickedEntitySpawnPacket;
 import org.jetbrains.annotations.Nullable;
 
 public class WickedPaintingEntity extends AbstractDecorationEntity {
@@ -80,9 +81,30 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     }
 
     @Override
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        this.writeCustomDataToNbt(nbt);
+        super.writeNbt(nbt);
+
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        this.readCustomDataFromNbt(nbt);
+    }
+
+    @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        var p = (WickedEntitySpawnPacket) packet;
+        super.onSpawnPacket(p);
+        this.readCustomDataFromNbt(p.getCustomData());
+    }
+
+    @Override
     public Packet<?> createSpawnPacket() {
-        WickedPaintings.LOGGER.debug("Creating spawn packet for painting entity");
-        return new EntitySpawnS2CPacket(this);
+        WickedPaintings.LOGGERS.debug("Creating spawn packet for painting entity");
+        return new WickedEntitySpawnPacket(this);
     }
 
     @Override

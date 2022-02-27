@@ -21,7 +21,7 @@ public class ClientBoundPackets {
 
     public static void registerPackets() {
         registerClientBoundHandler(WICKED_SPAWN, (a, b, c, d) -> {
-            WickedPaintings.LOGGER.info("Received entity: " + c.readUuid());
+            WickedPaintings.LOGGERS.info("Received entity: " + c.readUuid());
 
             ClientBoundPackets.onWickedSpawn(a, b, c, d);
         });
@@ -46,20 +46,20 @@ public class ClientBoundPackets {
         var nbt = new NbtCompound();
         wickedEntity.writeCustomDataToNbt(nbt);
 
-        WickedPaintings.LOGGER.info("Sending NBT to client: " + nbt);
+        WickedPaintings.LOGGERS.info("Sending NBT to client: " + nbt);
 
         buffer.writeNbt(nbt);
 
 
 
-        WickedPaintings.LOGGER.info("Sending entity: " + wickedEntity.getUuid());
+        WickedPaintings.LOGGERS.info("Sending entity: " + wickedEntity.getUuid());
 
         ServerPlayNetworking.send(player, WICKED_SPAWN, buffer);
     }
 
     private static void onWickedSpawn(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender sender) {
         System.out.println("Received entity: " + buffer.readUuid());
-        WickedPaintings.LOGGER.info("Received entity");
+        WickedPaintings.LOGGERS.info("Received entity");
         var world = client.world;
         if (world == null) {
             return;
@@ -89,12 +89,12 @@ public class ClientBoundPackets {
         wickedEntity.updateTrackedPosition(pos.getX(), pos.getY(), pos.getZ());
         wickedEntity.refreshPositionAfterTeleport(pos.getX(), pos.getY(), pos.getZ());
 
-        WickedPaintings.LOGGER.info("Spawned entity: " + wickedEntity.getUuid());
-        WickedPaintings.LOGGER.info("Entity ID: " + wickedEntity.getId());
-        WickedPaintings.LOGGER.info("Entity pitch: " + wickedEntity.getPitch());
-        WickedPaintings.LOGGER.info("Entity yaw: " + wickedEntity.getYaw());
-        WickedPaintings.LOGGER.info("Entity pos: " + wickedEntity.getBlockPos());
-        WickedPaintings.LOGGER.info("Entity direction: " + wickedEntity.getDirection());
+        WickedPaintings.LOGGERS.info("Spawned entity: " + wickedEntity.getUuid());
+        WickedPaintings.LOGGERS.info("Entity ID: " + wickedEntity.getId());
+        WickedPaintings.LOGGERS.info("Entity pitch: " + wickedEntity.getPitch());
+        WickedPaintings.LOGGERS.info("Entity yaw: " + wickedEntity.getYaw());
+        WickedPaintings.LOGGERS.info("Entity pos: " + wickedEntity.getBlockPos());
+        WickedPaintings.LOGGERS.info("Entity direction: " + wickedEntity.getDirection());
 
         client.execute(() -> {
             client.world.spawnEntity(wickedEntity);

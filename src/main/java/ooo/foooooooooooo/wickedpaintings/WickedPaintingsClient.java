@@ -4,7 +4,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import ooo.foooooooooooo.wickedpaintings.entity.ModEntityTypes;
-import ooo.foooooooooooo.wickedpaintings.network.ClientBoundPackets;
 
 @Environment(EnvType.CLIENT)
 public class WickedPaintingsClient implements ClientModInitializer {
@@ -12,6 +11,6 @@ public class WickedPaintingsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModEntityTypes.registerRenderers();
-        ClientBoundPackets.registerPackets();
+//        ClientBoundPackets.registerPackets();
     }
 }

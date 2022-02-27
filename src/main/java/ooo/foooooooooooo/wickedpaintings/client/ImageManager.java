@@ -48,14 +48,14 @@ public class ImageManager {
         try {
             image = ImageUtils.downloadBufImage(url);
         } catch (IOException e) {
-            WickedPaintings.LOGGER.error("Failed to download image: " + url + ", Exception: " + e.getMessage());
+            WickedPaintings.LOGGERS.error("Failed to download image: " + url + ", Exception: " + e.getMessage());
             return LoadedImage.DEFAULT;
         }
 
         try {
             ImageUtils.saveBufferedImageAsIdentifier(image, id);
         } catch (IOException e) {
-            WickedPaintings.LOGGER.error("Failed to save image as texture: " + url + ", Exception: " + e.getMessage());
+            WickedPaintings.LOGGERS.error("Failed to save image as texture: " + url + ", Exception: " + e.getMessage());
         }
 
         var loadedImage = new LoadedImage(id, url, image);

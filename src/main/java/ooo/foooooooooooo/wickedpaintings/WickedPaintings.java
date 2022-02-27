@@ -24,10 +24,10 @@ public class WickedPaintings implements ModInitializer {
             () -> new ItemStack(ModItems.WICKED_PAINTING)
     );
 
-    public static Logger LOGGER;
+    public static Logger LOGGERS;
 
     public WickedPaintings() {
-        LOGGER = LoggerFactory.getLogger(WickedPaintings.class);
+        LOGGERS = LoggerFactory.getLogger(WickedPaintings.class);
     }
 
     @Override
