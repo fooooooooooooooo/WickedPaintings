@@ -52,11 +52,7 @@ public class ImageManager {
             return LoadedImage.DEFAULT;
         }
 
-        try {
-            ImageUtils.saveBufferedImageAsIdentifier(image, id);
-        } catch (IOException e) {
-            WickedPaintings.LOGGERS.error("Failed to save image as texture: " + url + ", Exception: " + e.getMessage());
-        }
+        ImageUtils.saveBufferedImageAsIdentifier(image, id);
 
         var loadedImage = new LoadedImage(id, url, image);
 
