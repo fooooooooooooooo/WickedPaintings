@@ -1,14 +1,15 @@
 {
-  "text.autoconfig.wickedpaintings.title": "Wicked Paintings",
-  "text.autoconfig.wickedpaintings.sendMode": "Image sending mode",
-  "item.wickedpaintings.wicked_painting": "Wicked Painting",
-  "item.wickedpaintings.wicked_painting.tooltip": "Right click the air",
-  "gui.wickedpaintings.load_button": "Load",
-  "gui.wickedpaintings.apply_button": "Apply",
-  "gui.wickedpaintings.url_placeholder": "Image URL",
-  "gui.wickedpaintings.image_width_placeholder": "",
-  "gui.wickedpaintings.image_height_placeholder": "",
-  "gui.wickedpaintings.image_width": "Painting width",
-  "gui.wickedpaintings.image_height": "Painting height",
-  "gui.wickedpaintings.url_label_invalid": "Invalid URL"
+  "text.autoconfig.wicked_paintings.title": "Wicked Paintings",
+  "text.autoconfig.wicked_paintings.sendMode": "Image sending mode",
+  "item.wicked_paintings.wicked_painting": "Wicked Painting",
+  "item.wicked_paintings.wicked_painting.tooltip": "Right click the air",
+  "itemGroup.wicked_paintings.general": "Wicked Paintings",
+  "gui.wicked_paintings.load_button": "Load",
+  "gui.wicked_paintings.apply_button": "Apply",
+  "gui.wicked_paintings.url_placeholder": "Image URL",
+  "gui.wicked_paintings.image_width_placeholder": "",
+  "gui.wicked_paintings.image_height_placeholder": "",
+  "gui.wicked_paintings.image_width": "Painting width",
+  "gui.wicked_paintings.image_height": "Painting height",
+  "gui.wicked_paintings.url_label_invalid": "Invalid URL"
 }
