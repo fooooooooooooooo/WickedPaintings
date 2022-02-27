@@ -47,14 +47,6 @@ public class LoadedImage {
         return this.url;
     }
 
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
     @Nullable
     public BufferedImage getImage() {
         return this.image;

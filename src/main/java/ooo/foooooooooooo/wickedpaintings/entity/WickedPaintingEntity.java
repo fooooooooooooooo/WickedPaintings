@@ -61,10 +61,6 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
         return imageId;
     }
 
-    public Direction getDirection() {
-        return this.facing;
-    }
-
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         nbt.putInt(NbtConstants.FACING, this.facing.getHorizontal());

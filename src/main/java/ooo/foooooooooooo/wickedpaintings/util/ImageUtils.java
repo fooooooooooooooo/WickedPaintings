@@ -21,7 +21,7 @@ public class ImageUtils {
         BufferedImage bufferedImage = ImageIO.read(inputStream);
 
         var pixels = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
-        return new ImageData(pixels, bufferedImage.getWidth(), bufferedImage.getHeight());
+        return new ImageData(pixels);
     }
 
     public static BufferedImage downloadBufImage(String url) throws IOException {
@@ -30,7 +30,7 @@ public class ImageUtils {
         return ImageIO.read(inputStream);
     }
 
-    public static void saveBufferedImageAsIdentifier(BufferedImage bufferedImage, Identifier identifier) throws IOException {
+    public static void saveBufferedImageAsIdentifier(BufferedImage bufferedImage, Identifier identifier) {
         NativeImageBackedTexture texture;
 
         try {

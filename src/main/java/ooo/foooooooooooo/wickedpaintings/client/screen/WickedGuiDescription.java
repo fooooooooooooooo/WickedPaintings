@@ -112,7 +112,7 @@ public class WickedGuiDescription extends LightweightGuiDescription {
 
         int slot = this.hand == Hand.MAIN_HAND ? this.player.getInventory().selectedSlot : 40;
         ServerBoundPackets.sendWickedUpdate(slot, url, imageId, width, height);
-        
+
         MinecraftClient.getInstance().setScreen(null);
     }
 

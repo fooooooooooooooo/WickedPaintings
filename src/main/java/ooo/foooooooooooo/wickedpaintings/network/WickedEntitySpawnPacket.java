@@ -3,7 +3,6 @@ package ooo.foooooooooooo.wickedpaintings.network;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -35,20 +34,6 @@ public class WickedEntitySpawnPacket extends EntitySpawnS2CPacket {
         this.facing = Direction.fromHorizontal(buf.readByte());
     }
 
-    public NbtCompound getCustomData() {
-        return this.customData;
-    }
-
-    public Direction getFacing() {
-        return this.facing;
-    }
-
-    public void write(PacketByteBuf buf) {
-        super.write(buf);
-        buf.writeNbt(this.customData);
-        buf.writeByte(this.facing.getHorizontal());
-    }
-
     public static Packet<?> createPacket(WickedPaintingEntity entity) {
         var passedData = new PacketByteBuf(Unpooled.buffer());
         new WickedEntitySpawnPacket(entity, entity.getId()).write(passedData);
@@ -56,9 +41,19 @@ public class WickedEntitySpawnPacket extends EntitySpawnS2CPacket {
     }
 
     @Environment(EnvType.CLIENT)
-    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender sender) {
+    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer) {
         var packet = new WickedEntitySpawnPacket(buffer);
 
         client.execute(() -> handler.onEntitySpawn(packet));
+    }
+
+    public NbtCompound getCustomData() {
+        return this.customData;
+    }
+
+    public void write(PacketByteBuf buf) {
+        super.write(buf);
+        buf.writeNbt(this.customData);
+        buf.writeByte(this.facing.getHorizontal());
     }
 }
