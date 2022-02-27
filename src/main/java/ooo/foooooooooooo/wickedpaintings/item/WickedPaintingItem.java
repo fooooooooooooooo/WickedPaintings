@@ -9,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DecorationItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
@@ -24,7 +23,6 @@ import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.client.screen.WickedPaintingScreen;
 import ooo.foooooooooooo.wickedpaintings.entity.ModEntityTypes;
 import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
-import ooo.foooooooooooo.wickedpaintings.network.ClientBoundPackets;
 
 import java.util.List;
 
@@ -101,7 +99,6 @@ public class WickedPaintingItem extends DecorationItem {
 
                     world.emitGameEvent(playerEntity, GameEvent.ENTITY_PLACE, blockPos);
                     world.spawnEntity(wickedEntity);
-                    ClientBoundPackets.sendWickedSpawn((ServerPlayerEntity) playerEntity, wickedEntity);
                 }
 
                 itemStack.decrement(1);

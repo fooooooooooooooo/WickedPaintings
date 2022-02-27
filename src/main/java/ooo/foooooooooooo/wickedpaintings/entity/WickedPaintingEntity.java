@@ -104,7 +104,7 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     @Override
     public Packet<?> createSpawnPacket() {
         WickedPaintings.LOGGERS.debug("Creating spawn packet for painting entity");
-        return new WickedEntitySpawnPacket(this);
+        return WickedEntitySpawnPacket.createPacket(this);
     }
 
     @Override
