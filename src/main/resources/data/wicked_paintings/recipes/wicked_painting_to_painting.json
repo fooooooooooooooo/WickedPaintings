@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "wicked_paintings:wicked_painting"
+    }
+  ],
+  "result": {
+    "item": "minecraft:painting",
+    "count": 1
+  }
+}
+
