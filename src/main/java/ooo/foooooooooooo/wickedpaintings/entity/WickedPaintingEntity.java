@@ -15,7 +15,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import ooo.foooooooooooo.wickedpaintings.NbtConstants;
-import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.item.ModItems;
 import ooo.foooooooooooo.wickedpaintings.network.WickedEntitySpawnPacket;
@@ -23,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class WickedPaintingEntity extends AbstractDecorationEntity {
     private String url = "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png";
-    private int width = 1;
-    private int height = 1;
+    private int width = 16;
+    private int height = 16;
     private Identifier imageId = ImageManager.DEFAULT_IMAGE_ID;
 
     public WickedPaintingEntity(EntityType<? extends AbstractDecorationEntity> entityType, World world) {
@@ -81,9 +80,25 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     }
 
     @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+
+        this.setFacing(Direction.fromHorizontal(nbt.getByte(NbtConstants.FACING)));
+
+        this.url = nbt.getString(NbtConstants.URL);
+
+        this.width = nbt.getInt(NbtConstants.WIDTH);
+        this.height = nbt.getInt(NbtConstants.HEIGHT);
+
+        this.imageId = Identifier.tryParse(nbt.getString(NbtConstants.IMAGE_ID));
+
+        super.readCustomDataFromNbt(nbt);
+        this.updateAttachmentPosition();
+    }
+
+    @Override
     public NbtCompound writeNbt(NbtCompound nbt) {
-        this.writeCustomDataToNbt(nbt);
         super.writeNbt(nbt);
+        this.writeCustomDataToNbt(nbt);
 
         return nbt;
     }
@@ -95,30 +110,17 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     }
 
     @Override
-    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
-        var p = (WickedEntitySpawnPacket) packet;
-        super.onSpawnPacket(p);
-        this.readCustomDataFromNbt(p.getCustomData());
-    }
-
-    @Override
     public Packet<?> createSpawnPacket() {
-        WickedPaintings.LOGGERS.debug("Creating spawn packet for painting entity");
         return WickedEntitySpawnPacket.createPacket(this);
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        this.setFacing(Direction.fromHorizontal(nbt.getByte(NbtConstants.FACING)));
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        super.onSpawnPacket(packet);
 
-        this.url = nbt.getString(NbtConstants.URL);
-
-        this.width = nbt.getInt(NbtConstants.WIDTH);
-        this.height = nbt.getInt(NbtConstants.HEIGHT);
-
-        this.imageId = Identifier.tryParse(nbt.getString(NbtConstants.IMAGE_ID));
-
-        super.readCustomDataFromNbt(nbt);
+        if (packet instanceof WickedEntitySpawnPacket wickedPacket) {
+            this.readCustomDataFromNbt(wickedPacket.getCustomData());
+        }
     }
 
     @Override

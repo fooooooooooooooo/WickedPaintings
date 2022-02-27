@@ -75,6 +75,8 @@ public class WickedPaintingItem extends DecorationItem {
                 nbt.putString(NbtConstants.IMAGE_ID, ImageManager.DEFAULT_IMAGE_ID.toString());
             }
 
+            // Clamp width and height to between 1 and 32
+
             var width = Math.max(1, Math.min(32, nbt.getInt(NbtConstants.WIDTH)));
             nbt.putInt(NbtConstants.WIDTH, width);
 
@@ -83,12 +85,14 @@ public class WickedPaintingItem extends DecorationItem {
 
             nbt.putInt(NbtConstants.FACING, direction.getHorizontal());
 
+            // Don't know why this is necessary, but it is
             nbt.putInt(NbtConstants.ATTACHMENT_POS_X, blockPos2.getX());
             nbt.putInt(NbtConstants.ATTACHMENT_POS_Y, blockPos2.getY());
             nbt.putInt(NbtConstants.ATTACHMENT_POS_Z, blockPos2.getZ());
 
             wickedEntity.readCustomDataFromNbt(nbt);
 
+            // Also don't know why this is necessary, but it is
             wickedEntity.setPos(blockPos2.getX(), blockPos2.getY(), blockPos2.getZ());
 
             EntityType.loadFromEntityNbt(world, playerEntity, wickedEntity, nbt);

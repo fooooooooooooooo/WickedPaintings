@@ -31,18 +31,24 @@ public class ImageUtils {
     }
 
     public static void saveBufferedImageAsIdentifier(BufferedImage bufferedImage, Identifier identifier) throws IOException {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, "png", stream);
-        byte[] bytes = stream.toByteArray();
+        NativeImageBackedTexture texture;
 
-        ByteBuffer data = BufferUtils.createByteBuffer(bytes.length).put(bytes);
-        data.flip();
-        NativeImage img = NativeImage.read(data);
-        NativeImageBackedTexture texture = new NativeImageBackedTexture(img);
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", stream);
+            byte[] bytes = stream.toByteArray();
 
-        MinecraftClient.getInstance().execute(() -> {
-            MinecraftClient.getInstance().getTextureManager().registerTexture(identifier, texture);
-        });
+            ByteBuffer data = BufferUtils.createByteBuffer(bytes.length).put(bytes);
+            data.flip();
+            NativeImage img = NativeImage.read(data);
+            texture = new NativeImageBackedTexture(img);
+        } catch (Exception e) {
+            texture = new NativeImageBackedTexture(new NativeImage(1, 1, false));
+        }
+
+        NativeImageBackedTexture finalTexture = texture;
+
+        MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().getTextureManager().registerTexture(identifier, finalTexture));
     }
 }
 
