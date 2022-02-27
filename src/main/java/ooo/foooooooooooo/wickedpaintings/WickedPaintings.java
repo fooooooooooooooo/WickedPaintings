@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.config.ModConfig;
 import ooo.foooooooooooo.wickedpaintings.entity.ModEntityTypes;
 import ooo.foooooooooooo.wickedpaintings.item.ModItems;
-import ooo.foooooooooooo.wickedpaintings.network.ServerBoundPackets;
+import ooo.foooooooooooo.wickedpaintings.network.ModNetworking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +37,6 @@ public class WickedPaintings implements ModInitializer {
 
         ModEntityTypes.registerEntityTypes();
         ModItems.registerItems();
-        ServerBoundPackets.registerPackets();
+        ModNetworking.registerServerBoundPackets();
     }
 }

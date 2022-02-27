@@ -12,6 +12,6 @@ public class WickedPaintingsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModEntityTypes.registerRenderers();
-        ModNetworking.registerPackets();
+        ModNetworking.registerClientBoundPackets();
     }
 }
