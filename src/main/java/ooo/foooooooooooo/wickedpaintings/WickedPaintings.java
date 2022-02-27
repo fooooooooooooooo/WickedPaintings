@@ -40,4 +40,3 @@ public class WickedPaintings implements ModInitializer {
         ServerBoundPackets.registerPackets();
     }
 }
-

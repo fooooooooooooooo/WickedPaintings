@@ -67,8 +67,6 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-
         nbt.putInt(NbtConstants.FACING, this.facing.getHorizontal());
 
         nbt.putString(NbtConstants.URL, this.url);
@@ -77,6 +75,8 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
         nbt.putInt(NbtConstants.HEIGHT, this.height);
 
         nbt.putString(NbtConstants.IMAGE_ID, this.imageId.toString());
+
+        super.writeCustomDataToNbt(nbt);
     }
 
     @Override
@@ -87,8 +87,6 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-
         this.setFacing(Direction.fromHorizontal(nbt.getByte(NbtConstants.FACING)));
 
         this.url = nbt.getString(NbtConstants.URL);
@@ -97,6 +95,8 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
         this.height = nbt.getInt(NbtConstants.HEIGHT);
 
         this.imageId = Identifier.tryParse(nbt.getString(NbtConstants.IMAGE_ID));
+
+        super.readCustomDataFromNbt(nbt);
     }
 
     @Override
