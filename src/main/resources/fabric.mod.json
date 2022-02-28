@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "wicked-paintings",
-  "version": "${version}",
+  "version": "0.0.1",
   "name": "Wicked Paintings",
   "description": "WICKED paintings",
   "authors": [
@@ -15,11 +15,11 @@
   "icon": "assets/wicked_paintings/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "ooo.foooooooooooo.wickedpaintings.mod.WickedPaintingsClient"
-    ],
     "main": [
-      "ooo.foooooooooooo.wickedpaintings.mod.WickedPaintings"
+      "ooo.foooooooooooo.wickedpaintings.WickedPaintings"
+    ],
+    "client": [
+      "ooo.foooooooooooo.wickedpaintings.WickedPaintingsClient"
     ],
     "modmenu": [
       "ooo.foooooooooooo.wickedpaintings.client.ModMenuIntegration"

@@ -1,7 +1,5 @@
 package ooo.foooooooooooo.wickedpaintings.entity;
 
-import net.fabricmc.loader.impl.util.log.Log;
-import net.fabricmc.loader.impl.util.log.LogCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
@@ -9,131 +7,149 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import ooo.foooooooooooo.wickedpaintings.NbtConstants;
+import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.item.ModItems;
+import ooo.foooooooooooo.wickedpaintings.network.WickedEntitySpawnPacket;
 import org.jetbrains.annotations.Nullable;
 
 public class WickedPaintingEntity extends AbstractDecorationEntity {
-  public String url = "";
+    private String url = "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png";
+    private int width = 16;
+    private int height = 16;
+    private Identifier imageId = ImageManager.DEFAULT_IMAGE_ID;
 
-  public int width = 16;
-  public int height = 16;
-  public Identifier identifier;
-  public byte[] data;
-
-  public WickedPaintingEntity(EntityType<? extends AbstractDecorationEntity> entityType, World world) {
-    super(entityType, world);
-  }
-
-  @Override
-  public int getWidthPixels() {
-    return this.width;
-  }
-
-  @Override
-  public int getHeightPixels() {
-    return this.height;
-  }
-
-  @Override
-  public void writeCustomDataToNbt(NbtCompound nbt) {
-    nbt.putString("Url", this.url);
-    nbt.putByte("Facing", (byte) this.facing.getHorizontal());
-    nbt.putInt("Width", this.width);
-    nbt.putInt("Height", this.height);
-    nbt.putString("Identifier", this.identifier.toString());
-    nbt.putByteArray("Data", this.data);
-
-    super.writeCustomDataToNbt(nbt);
-  }
-
-  @Override
-  public void readCustomDataFromNbt(NbtCompound nbt) {
-    this.url = nbt.getString("Url");
-    this.facing = Direction.fromHorizontal(nbt.getByte("Facing"));
-    this.width = nbt.getInt("Width");
-    this.height = nbt.getInt("Height");
-    this.identifier = Identifier.tryParse(nbt.getString("Identifier"));
-    this.data = nbt.getByteArray("Data");
-
-    super.readCustomDataFromNbt(nbt);
-    this.setFacing(this.facing);
-  }
-
-  @Override
-  public void onBreak(@Nullable Entity entity) {
-    Log.info(LogCategory.LOG, "Painting broken");
-    if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
-      this.playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0F, 1.0F);
-      if (entity instanceof PlayerEntity playerEntity) {
-        if (playerEntity.getAbilities().creativeMode) {
-          return;
-        }
-      }
-
-      var itemStack = new ItemStack(ModItems.WICKED_PAINTING);
-
-      var nbt = itemStack.getOrCreateNbt();
-      nbt.putString("Url", this.url);
-      nbt.putByte("Facing", (byte) this.facing.getHorizontal());
-      nbt.putInt("Width", this.width);
-      nbt.putInt("Height", this.height);
-      nbt.putString("Identifier", this.identifier.toString());
-      nbt.putByteArray("Data", this.data);
-
-      this.dropStack(itemStack);
+    public WickedPaintingEntity(EntityType<? extends AbstractDecorationEntity> entityType, World world) {
+        super(entityType, world);
     }
-  }
 
-  @Override
-  public void onPlace() {
-    Log.info(LogCategory.LOG, "Painting placed");
-    this.playSound(SoundEvents.ENTITY_PAINTING_PLACE, 1.0F, 1.0F);
-  }
+    public WickedPaintingEntity(World world, BlockPos position, Direction direction) {
+        super(ModEntityTypes.WICKED_PAINTING, world, position);
+        super.setFacing(direction);
+    }
 
-  @Override
-  public Packet<?> createSpawnPacket() {
-    return null;
-  }
+    public int getRealWidth() {
+        return this.width;
+    }
 
-  @Override
-  public ItemStack getPickBlockStack() {
-    Log.info(LogCategory.LOG, "Painting picked");
-    return new ItemStack(ModItems.WICKED_PAINTING);
-  }
+    public int getRealHeight() {
+        return this.height;
+    }
 
-  @Override
-  public boolean shouldRenderName() {
-    return true;
-  }
+    @Override
+    public int getWidthPixels() {
+        return this.width * 16;
+    }
 
-  public void readFromBuffer(PacketByteBuf buffer) {
-    Log.info(LogCategory.LOG, "Reading painting from buffer");
-    Log.info(LogCategory.LOG, "bytes: " + buffer.readableBytes());
+    @Override
+    public int getHeightPixels() {
+        return this.height * 16;
+    }
 
-    this.url = buffer.readString();
-    this.setFacing(Direction.fromHorizontal(buffer.readByte()));
-    this.width = buffer.readInt();
-    this.height = buffer.readInt();
-    this.identifier = Identifier.tryParse(buffer.readString());
-    this.data = buffer.readByteArray();
-  }
+    public String getUrl() {
+        return this.url;
+    }
 
-  public void writeToBuffer(PacketByteBuf buf) {
-    Log.info(LogCategory.LOG, "Writing painting to buffer");
+    public Identifier getImageId() {
+        return imageId;
+    }
 
-    buf.writeString(this.url);
-    buf.writeByte(this.facing.getHorizontal());
-    buf.writeInt(this.getWidthPixels());
-    buf.writeInt(this.getHeightPixels());
-    buf.writeString(this.identifier.toString());
-    buf.writeByteArray(this.data);
-  }
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        nbt.putInt(NbtConstants.FACING, this.facing.getHorizontal());
 
+        nbt.putString(NbtConstants.URL, this.url);
 
+        nbt.putInt(NbtConstants.WIDTH, this.width);
+        nbt.putInt(NbtConstants.HEIGHT, this.height);
+
+        nbt.putString(NbtConstants.IMAGE_ID, this.imageId.toString());
+
+        super.writeCustomDataToNbt(nbt);
+    }
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+
+        this.setFacing(Direction.fromHorizontal(nbt.getByte(NbtConstants.FACING)));
+
+        this.url = nbt.getString(NbtConstants.URL);
+
+        this.width = nbt.getInt(NbtConstants.WIDTH);
+        this.height = nbt.getInt(NbtConstants.HEIGHT);
+
+        this.imageId = Identifier.tryParse(nbt.getString(NbtConstants.IMAGE_ID));
+
+        super.readCustomDataFromNbt(nbt);
+        this.updateAttachmentPosition();
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        this.writeCustomDataToNbt(nbt);
+
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        this.readCustomDataFromNbt(nbt);
+    }
+
+    @Override
+    public Packet<?> createSpawnPacket() {
+        return WickedEntitySpawnPacket.createPacket(this);
+    }
+
+    @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        super.onSpawnPacket(packet);
+
+        if (packet instanceof WickedEntitySpawnPacket wickedPacket) {
+            this.readCustomDataFromNbt(wickedPacket.getCustomData());
+        }
+    }
+
+    @Override
+    public void onBreak(@Nullable Entity entity) {
+        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+            this.playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0F, 1.0F);
+
+            if (entity instanceof PlayerEntity playerEntity) {
+                if (playerEntity.getAbilities().creativeMode) {
+                    return;
+                }
+            }
+
+            var itemStack = new ItemStack(ModItems.WICKED_PAINTING);
+            var nbt = itemStack.getOrCreateNbt();
+
+            this.writeCustomDataToNbt(nbt);
+            this.dropStack(itemStack);
+        }
+    }
+
+    @Override
+    public void onPlace() {
+        this.playSound(SoundEvents.ENTITY_PAINTING_PLACE, 1.0F, 1.0F);
+    }
+
+    @Override
+    public ItemStack getPickBlockStack() {
+        var itemStack = new ItemStack(ModItems.WICKED_PAINTING);
+
+        var nbt = itemStack.getOrCreateNbt();
+        this.writeCustomDataToNbt(nbt);
+
+        return itemStack;
+    }
 }
