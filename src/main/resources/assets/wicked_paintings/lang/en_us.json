@@ -11,5 +11,6 @@
   "gui.wicked_paintings.image_height_placeholder": "",
   "gui.wicked_paintings.image_width": "Painting width",
   "gui.wicked_paintings.image_height": "Painting height",
-  "gui.wicked_paintings.url_label_invalid": "Invalid URL"
+  "gui.wicked_paintings.url_label_invalid": "Invalid URL",
+  "text.autoconfig.wicked_paintings.option.enabled": "Render Wicked Paintings"
 }
