@@ -6,5 +6,5 @@ import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 
 @Config(name = WickedPaintings.MOD_ID)
 public class ModConfig implements ConfigData {
-    // TODO: Add config options
+    public boolean enabled = true;
 }

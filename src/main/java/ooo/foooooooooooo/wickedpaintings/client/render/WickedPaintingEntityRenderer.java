@@ -1,6 +1,7 @@
 package ooo.foooooooooooo.wickedpaintings.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.*;
@@ -10,17 +11,22 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Quaternion;
 import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
+import ooo.foooooooooooo.wickedpaintings.config.ModConfig;
 import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
 import org.lwjgl.opengl.GL11;
 
 @Environment(EnvType.CLIENT)
 public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingEntity> {
+    private final ModConfig config;
+
     public WickedPaintingEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
+        this.config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
     }
 
     @Override
     public void render(WickedPaintingEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        if (!config.enabled) return;
         var image = ImageManager.loadImage(entity.getImageId(), entity.getUrl());
 
         var imageId = image.getTextureId();
