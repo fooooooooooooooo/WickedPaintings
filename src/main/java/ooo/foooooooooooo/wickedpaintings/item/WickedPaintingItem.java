@@ -10,7 +10,6 @@ import net.minecraft.item.DecorationItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -51,7 +50,7 @@ public class WickedPaintingItem extends DecorationItem {
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        tooltip.add(new TranslatableText(getOrCreateTranslationKey() + ".tooltip"));
+        tooltip.add(Text.translatable(getOrCreateTranslationKey() + ".tooltip"));
     }
 
     @Override
