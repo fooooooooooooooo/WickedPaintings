@@ -18,26 +18,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class WickedPaintings implements ModInitializer {
-    public static final String MOD_ID = "wicked_paintings";
+  public static final String MOD_ID = "wicked_paintings";
 
-    public static final Identifier GENERAL_GROUP_ID = new Identifier(MOD_ID, "general");
-    public static final ItemGroup GENERAL_ITEM_GROUP = FabricItemGroup.builder(GENERAL_GROUP_ID)
-            .displayName(Text.translatable("itemGroup.wicked_paintings.general"))
-            .icon(() -> new ItemStack(ModItems.WICKED_PAINTING))
-//            .entries((enabledFeatures, entries, operatorEnabled) -> {
-//                entries.add(ModItems.WICKED_PAINTING);
-//            })
-            .build();
+  public static final Identifier GENERAL_GROUP_ID = new Identifier(MOD_ID, "general");
+  public static final ItemGroup GENERAL_ITEM_GROUP = FabricItemGroup.builder(GENERAL_GROUP_ID)
+    .displayName(Text.translatable("itemGroup.wicked_paintings.general"))
+    .icon(() -> new ItemStack(ModItems.WICKED_PAINTING))
+    .build();
 
-    public static final Logger LOGGERS = LoggerFactory.getLogger(WickedPaintings.class);
+  public static final Logger LOGGERS = LoggerFactory.getLogger(WickedPaintings.class);
 
-    @Override
-    public void onInitialize() {
-        Log.info(LogCategory.LOG, "Loading Wicked Paintings");
-        AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
+  @Override
+  public void onInitialize() {
+    Log.info(LogCategory.LOG, "Loading Wicked Paintings");
+    AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
 
-        ModEntityTypes.registerEntityTypes();
-        ModItems.registerItems();
-        ModNetworking.registerServerBoundPackets();
-    }
+    ModEntityTypes.registerEntityTypes();
+    ModItems.registerItems();
+    ModNetworking.registerServerBoundPackets();
+  }
 }

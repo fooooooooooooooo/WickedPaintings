@@ -16,39 +16,40 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 
 public class ImageUtils {
-    public static ImageData downloadImage(String url) throws IOException {
-        BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());
-        BufferedImage bufferedImage = ImageIO.read(inputStream);
+  public static ImageData downloadImage(String url) throws IOException {
+    BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());
+    BufferedImage bufferedImage = ImageIO.read(inputStream);
 
-        var pixels = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
-        return new ImageData(pixels);
+    var pixels = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
+    return new ImageData(pixels);
+  }
+
+  public static BufferedImage downloadBufImage(String url) throws IOException {
+    BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());
+
+    return ImageIO.read(inputStream);
+  }
+
+  public static void saveBufferedImageAsIdentifier(BufferedImage bufferedImage, Identifier identifier) {
+    NativeImageBackedTexture texture;
+
+    try {
+      ByteArrayOutputStream stream = new ByteArrayOutputStream();
+      ImageIO.write(bufferedImage, "png", stream);
+      byte[] bytes = stream.toByteArray();
+
+      ByteBuffer data = BufferUtils.createByteBuffer(bytes.length).put(bytes);
+      data.flip();
+      NativeImage img = NativeImage.read(data);
+      texture = new NativeImageBackedTexture(img);
+    } catch (Exception e) {
+      texture = new NativeImageBackedTexture(new NativeImage(1, 1, false));
     }
 
-    public static BufferedImage downloadBufImage(String url) throws IOException {
-        BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());
+    NativeImageBackedTexture finalTexture = texture;
 
-        return ImageIO.read(inputStream);
-    }
-
-    public static void saveBufferedImageAsIdentifier(BufferedImage bufferedImage, Identifier identifier) {
-        NativeImageBackedTexture texture;
-
-        try {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, "png", stream);
-            byte[] bytes = stream.toByteArray();
-
-            ByteBuffer data = BufferUtils.createByteBuffer(bytes.length).put(bytes);
-            data.flip();
-            NativeImage img = NativeImage.read(data);
-            texture = new NativeImageBackedTexture(img);
-        } catch (Exception e) {
-            texture = new NativeImageBackedTexture(new NativeImage(1, 1, false));
-        }
-
-        NativeImageBackedTexture finalTexture = texture;
-
-        MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().getTextureManager().registerTexture(identifier, finalTexture));
-    }
+    MinecraftClient.getInstance()
+      .execute(() -> MinecraftClient.getInstance().getTextureManager().registerTexture(identifier, finalTexture));
+  }
 }
 

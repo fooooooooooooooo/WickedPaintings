@@ -16,45 +16,45 @@ import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
 
 public class WickedEntitySpawnPacket extends EntitySpawnS2CPacket {
 
-    private final NbtCompound customData;
-    private final Direction facing;
+  private final NbtCompound customData;
+  private final Direction facing;
 
-    public WickedEntitySpawnPacket(WickedPaintingEntity entity, int id) {
-        super(entity, id);
+  public WickedEntitySpawnPacket(WickedPaintingEntity entity, int id) {
+    super(entity, id);
 
-        var nbt = new NbtCompound();
-        entity.writeCustomDataToNbt(nbt);
+    var nbt = new NbtCompound();
+    entity.writeCustomDataToNbt(nbt);
 
-        this.customData = nbt;
-        this.facing = entity.getHorizontalFacing();
-    }
+    this.customData = nbt;
+    this.facing = entity.getHorizontalFacing();
+  }
 
-    public WickedEntitySpawnPacket(PacketByteBuf buf) {
-        super(buf);
-        this.customData = buf.readNbt();
-        this.facing = Direction.fromHorizontal(buf.readByte());
-    }
+  public WickedEntitySpawnPacket(PacketByteBuf buf) {
+    super(buf);
+    this.customData = buf.readNbt();
+    this.facing = Direction.fromHorizontal(buf.readByte());
+  }
 
-    public static Packet<ClientPlayPacketListener> createPacket(WickedPaintingEntity entity) {
-        var passedData = new PacketByteBuf(Unpooled.buffer());
-        new WickedEntitySpawnPacket(entity, entity.getId()).write(passedData);
-        return ServerPlayNetworking.createS2CPacket(Packets.WICKED_SPAWN, passedData);
-    }
+  public static Packet<ClientPlayPacketListener> createPacket(WickedPaintingEntity entity) {
+    var passedData = new PacketByteBuf(Unpooled.buffer());
+    new WickedEntitySpawnPacket(entity, entity.getId()).write(passedData);
+    return ServerPlayNetworking.createS2CPacket(Packets.WICKED_SPAWN, passedData);
+  }
 
-    @Environment(EnvType.CLIENT)
-    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer) {
-        var packet = new WickedEntitySpawnPacket(buffer);
+  @Environment(EnvType.CLIENT)
+  public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer) {
+    var packet = new WickedEntitySpawnPacket(buffer);
 
-        client.execute(() -> handler.onEntitySpawn(packet));
-    }
+    client.execute(() -> handler.onEntitySpawn(packet));
+  }
 
-    public NbtCompound getCustomData() {
-        return this.customData;
-    }
+  public NbtCompound getCustomData() {
+    return this.customData;
+  }
 
-    public void write(PacketByteBuf buf) {
-        super.write(buf);
-        buf.writeNbt(this.customData);
-        buf.writeByte(this.facing.getHorizontal());
-    }
+  public void write(PacketByteBuf buf) {
+    super.write(buf);
+    buf.writeNbt(this.customData);
+    buf.writeByte(this.facing.getHorizontal());
+  }
 }

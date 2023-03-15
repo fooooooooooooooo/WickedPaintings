@@ -9,9 +9,9 @@ import ooo.foooooooooooo.wickedpaintings.network.ModNetworking;
 @Environment(EnvType.CLIENT)
 public class WickedPaintingsClient implements ClientModInitializer {
 
-    @Override
-    public void onInitializeClient() {
-        ModEntityTypes.registerRenderers();
-        ModNetworking.registerClientBoundPackets();
-    }
+  @Override
+  public void onInitializeClient() {
+    ModEntityTypes.registerRenderers();
+    ModNetworking.registerClientBoundPackets();
+  }
 }

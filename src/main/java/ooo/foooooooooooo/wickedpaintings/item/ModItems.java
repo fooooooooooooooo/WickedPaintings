@@ -8,20 +8,20 @@ import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 
 public class ModItems {
-    public static final Item WICKED_PAINTING = new WickedPaintingItem(defaultSettings());
+  public static final Item WICKED_PAINTING = new WickedPaintingItem(defaultSettings());
 
-    public static Item.Settings defaultSettings() {
-        return new Item.Settings();
-    }
+  public static Item.Settings defaultSettings() {
+    return new Item.Settings();
+  }
 
 
-    public static void registerItems() {
-        register(WICKED_PAINTING, "wicked_painting");
-    }
+  public static void registerItems() {
+    register(WICKED_PAINTING, "wicked_painting");
+  }
 
-    public static void register(Item item, String name) {
-        Registry.register(Registries.ITEM, new Identifier(WickedPaintings.MOD_ID, name), item);
+  public static void register(Item item, String name) {
+    Registry.register(Registries.ITEM, new Identifier(WickedPaintings.MOD_ID, name), item);
 
-        ItemGroupEvents.modifyEntriesEvent(WickedPaintings.GENERAL_ITEM_GROUP).register(entries -> entries.add(item));
-    }
+    ItemGroupEvents.modifyEntriesEvent(WickedPaintings.GENERAL_ITEM_GROUP).register(entries -> entries.add(item));
+  }
 }
