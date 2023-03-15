@@ -15,11 +15,7 @@ public class LoadedImage {
     private final BufferedImage image;
     private final Identifier imageId;
 
-    public LoadedImage(
-            Identifier imageId,
-            String url,
-            @Nullable BufferedImage image
-    ) {
+    public LoadedImage(Identifier imageId, String url, @Nullable BufferedImage image) {
         this.imageId = imageId;
         this.url = url;
 
@@ -57,11 +53,7 @@ public class LoadedImage {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (LoadedImage) obj;
-        return Objects.equals(this.imageId, that.imageId) &&
-                Objects.equals(this.url, that.url) &&
-                this.width == that.width &&
-                this.height == that.height &&
-                this.image == that.image;
+        return Objects.equals(this.imageId, that.imageId) && Objects.equals(this.url, that.url) && this.width == that.width && this.height == that.height && this.image == that.image;
     }
 
     @Override
@@ -71,11 +63,6 @@ public class LoadedImage {
 
     @Override
     public String toString() {
-        return "LoadedImage[" +
-                "identifier=" + imageId + ", " +
-                "url=" + url + ", " +
-                "width=" + width + ", " +
-                "height=" + height + ", " +
-                "image=" + image + "]";
+        return "LoadedImage[" + "identifier=" + imageId + ", " + "url=" + url + ", " + "width=" + width + ", " + "height=" + height + ", " + "image=" + image + "]";
     }
 }
