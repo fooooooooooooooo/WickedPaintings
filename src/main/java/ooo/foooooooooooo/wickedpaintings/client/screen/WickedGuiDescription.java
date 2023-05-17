@@ -1,32 +1,33 @@
 package ooo.foooooooooooo.wickedpaintings.client.screen;
 
-import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
+import io.github.cottonmc.cotton.gui.ItemSyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
 import io.github.cottonmc.cotton.gui.widget.data.Insets;
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.NbtConstants;
+import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.network.ServerBoundPackets;
 
-public class WickedGuiDescription extends LightweightGuiDescription {
+public class WickedGuiDescription extends ItemSyncedGuiDescription {
   private final ImageWidget imageWidget;
-  private final Hand hand;
-  private final PlayerEntity player;
   private boolean invalidUrl = false;
   private Identifier imageId = new Identifier("wicked_image", "default");
+  private final int selectedSlot;
 
   @SuppressWarnings("CommentedOutCode")
-  public WickedGuiDescription(Hand hand, PlayerEntity player, ItemStack stack) {
-    this.hand = hand;
-    this.player = player;
+  public WickedGuiDescription(int syncId, PlayerInventory playerInventory, StackReference stackRef) {
+    super(WickedPaintings.WICKED_SCREEN_HANDLER_TYPE, syncId, playerInventory, stackRef);
+
+    selectedSlot = playerInventory.selectedSlot;
+    var stack = stackRef.get();
 
     var root = new WGridPanel(9);
 
@@ -47,7 +48,7 @@ public class WickedGuiDescription extends LightweightGuiDescription {
 
     var widthField = new WTextField(Text.translatable("gui.wicked_paintings.image_width_placeholder"));
     widthField.setTextPredicate((text) -> text.matches("[0-9]+") && text.length() <= 2);
-    widthField.setText(nbt.getInt(NbtConstants.WIDTH) + "");
+    widthField.setText(String.valueOf(nbt.getInt(NbtConstants.WIDTH)));
     root.add(widthField, 9, 4, 4, 2);
 
     var heightLabel = new WLabel(Text.translatable("gui.wicked_paintings.image_height"));
@@ -56,7 +57,7 @@ public class WickedGuiDescription extends LightweightGuiDescription {
 
     var heightField = new WTextField(Text.translatable("gui.wicked_paintings.image_height_placeholder"));
     heightField.setTextPredicate((text) -> text.matches("[0-9]+") && text.length() <= 2);
-    heightField.setText(nbt.getInt(NbtConstants.HEIGHT) + "");
+    heightField.setText(String.valueOf(nbt.getInt(NbtConstants.HEIGHT)));
     root.add(heightField, 9, 7, 4, 2);
 
     var imageWidget = new ImageWidget(imageId);
@@ -74,8 +75,8 @@ public class WickedGuiDescription extends LightweightGuiDescription {
     urlField.setText(url);
     root.add(urlField, 0, 12, guiWidth, 2);
 
-    //        var debugLabel = new WDynamicLabel(() -> this.imageId.toString());
-    //        root.add(debugLabel, 0, 10, 0, 1);
+    // var debugLabel = new WDynamicLabel(() -> this.imageId.toString());
+    // root.add(debugLabel, 0, 10, 0, 1);
 
     var urlLabel = new WDynamicLabel(() -> invalidUrl ? I18n.translate("gui.wicked_paintings.url_label_invalid") : "");
     urlLabel.setColor(0xFF0F0F, 0xFF1F1F);
@@ -88,7 +89,8 @@ public class WickedGuiDescription extends LightweightGuiDescription {
     var applyButton = new WButton(Text.translatable("gui.wicked_paintings.apply_button"));
     applyButton.setOnClick(() -> onApply(urlField.getText(),
       parseField(widthField.getText(), 1),
-      parseField(heightField.getText(), 1)));
+      parseField(heightField.getText(), 1)
+    ));
 
     root.add(applyButton, guiWidth - 4, 16, 4, 2);
 
@@ -111,9 +113,9 @@ public class WickedGuiDescription extends LightweightGuiDescription {
 
     onLoad(url);
 
-    int slot = this.hand == Hand.MAIN_HAND ? this.player.getInventory().selectedSlot : 40;
+    // int slot = this.hand == Hand.MAIN_HAND ? this.player.getInventory().selectedSlot : 40;
 
-    ServerBoundPackets.sendWickedUpdate(slot, url, imageId, width, height);
+    ServerBoundPackets.sendWickedUpdate(selectedSlot, url, imageId, width, height);
 
     MinecraftClient.getInstance().setScreen(null);
   }

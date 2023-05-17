@@ -1,14 +1,19 @@
 package ooo.foooooooooooo.wickedpaintings.item;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.DecorationItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -19,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import ooo.foooooooooooo.wickedpaintings.NbtConstants;
 import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
-import ooo.foooooooooooo.wickedpaintings.client.screen.WickedPaintingScreen;
+import ooo.foooooooooooo.wickedpaintings.client.screen.WickedGuiDescription;
 import ooo.foooooooooooo.wickedpaintings.entity.ModEntityTypes;
 import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
 
@@ -31,21 +36,34 @@ public class WickedPaintingItem extends DecorationItem {
   }
 
   public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-    ItemStack stack = player.getStackInHand(hand);
-    if (world.isClient()) {
-      openClientGui(stack);
-    }
-
+    player.openHandledScreen(createScreenHandlerFactory(player, hand));
     return TypedActionResult.success(player.getStackInHand(hand));
   }
 
-  @Environment(EnvType.CLIENT)
-  private void openClientGui(ItemStack stack) {
-    var player = MinecraftClient.getInstance().player;
+  private NamedScreenHandlerFactory createScreenHandlerFactory(PlayerEntity player, Hand hand) {
+    EquipmentSlot slot = switch (hand) {
+      case MAIN_HAND -> EquipmentSlot.MAINHAND;
+      case OFF_HAND -> EquipmentSlot.OFFHAND;
+    };
 
-    if (player != null) {
-      MinecraftClient.getInstance().setScreen(new WickedPaintingScreen(player.getActiveHand(), player, stack));
-    }
+    ItemStack stack = player.getStackInHand(hand);
+
+    return new ExtendedScreenHandlerFactory() {
+      @Override
+      public Text getDisplayName() {
+        return stack.getName();
+      }
+
+      @Override
+      public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+        return new WickedGuiDescription(syncId, playerInventory, StackReference.of(player, slot));
+      }
+
+      @Override
+      public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+        buf.writeEnumConstant(slot);
+      }
+    };
   }
 
   @Override
@@ -71,7 +89,8 @@ public class WickedPaintingItem extends DecorationItem {
 
       if (nbt.getString(NbtConstants.URL) == null || nbt.getString(NbtConstants.URL).isEmpty()) {
         nbt.putString(NbtConstants.URL,
-          "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png");
+          "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png"
+        );
 
         nbt.putString(NbtConstants.IMAGE_ID, ImageManager.DEFAULT_IMAGE_ID.toString());
       }
