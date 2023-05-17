@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
 public class WickedPaintingScreen extends WickedScreen {
-    public WickedPaintingScreen(Hand hand, PlayerEntity player, ItemStack stack) {
-        super(new WickedGuiDescription(hand, player, stack));
-    }
+  public WickedPaintingScreen(Hand hand, PlayerEntity player, ItemStack stack) {
+    super(new WickedGuiDescription(hand, player, stack));
+  }
 }

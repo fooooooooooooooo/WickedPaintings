@@ -4,7 +4,7 @@ import io.github.cottonmc.cotton.gui.GuiDescription;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 
 public class WickedScreen extends CottonClientScreen {
-    public WickedScreen(GuiDescription description) {
-        super(description);
-    }
+  public WickedScreen(GuiDescription description) {
+    super(description);
+  }
 }
