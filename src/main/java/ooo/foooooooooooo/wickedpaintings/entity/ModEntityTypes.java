@@ -20,7 +20,7 @@ public class ModEntityTypes {
     .create(SpawnGroup.MISC,
       (EntityType<WickedPaintingEntity> entityType, World world) -> new WickedPaintingEntity(entityType, world))
     .dimensions(EntityDimensions.fixed(0.5F, 0.5F))
-    .trackRangeBlocks(10)
+    .trackRangeBlocks(64)
     .trackedUpdateRate(2147483647)
     .build();
 
