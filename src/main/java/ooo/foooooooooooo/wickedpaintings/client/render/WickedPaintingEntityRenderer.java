@@ -60,7 +60,7 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     float _yaw,
     float tickDelta,
     MatrixStack matrices,
-    VertexConsumerProvider vertexConsumerProvider,
+    VertexConsumerProvider consumerProvider,
     int light
   ) {
     if (!config.enabled) {
@@ -77,26 +77,26 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
 
     matrices.multiply(quaternionFromEulerAngles(180 - pitch, yaw, 180, true));
 
-    var vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(entity)));
+    var consumer = consumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(entity)));
 
-    this.drawTexture(matrices, vertexConsumer, entity, width, height);
+    this.drawTexture(matrices, consumer, entity, width, height);
 
     matrices.pop();
   }
 
   private void drawTexture(
-    MatrixStack matrices, VertexConsumer vertexConsumer, WickedPaintingEntity entity, int width, int height
+    MatrixStack matrices, VertexConsumer consumer, WickedPaintingEntity entity, int width, int height
   ) {
     MatrixStack.Entry entry = matrices.peek();
 
-    Matrix4f matrix4f = entry.getPositionMatrix();
-    Matrix3f matrix3f = entry.getNormalMatrix();
+    Matrix4f m4f = entry.getPositionMatrix();
+    Matrix3f m3f = entry.getNormalMatrix();
 
-    float offsetX = (float) -width / 2.0F;
-    float offsetY = (float) -height / 2.0F;
+    var offsetX = (-width / 2f);
+    var offsetY = (-height / 2f);
 
-    var blockScaleX = 1F / (float) width;
-    var blockScaleY = 1F / (float) height;
+    var scaleX = 1f / (float) width;
+    var scaleY = 1f / (float) height;
 
     var blockPos = entity.getBlockPos();
 
@@ -104,50 +104,44 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     var blockY = blockPos.getY();
     var blockZ = blockPos.getZ();
 
-    var lightingX = blockX;
-    var lightingY = blockY;
-    var lightingZ = blockZ;
+    var lightX = (float) blockX;
+    var lightY = (float) blockY;
+    var lightZ = (float) blockZ;
+
+    var correction = width % 2 == 0 ? 0 : 1;
 
     for (int x = 0; x < width; ++x) {
       for (int y = 0; y < height; ++y) {
-        var right = offsetX + (float) (x + 1);
-        var left = offsetX + (float) x;
-        var bottom = offsetY + (float) (y + 1);
-        var top = offsetY + (float) y;
+        // without these +1s nothing renders
+        var right = offsetX + x + 1;
+        var left = offsetX + x;
+        var bottom = offsetY + y + 1;
+        var top = offsetY + y;
 
         Direction direction = entity.getHorizontalFacing();
 
-        lightingY = MathHelper.floor(blockY + (double) (bottom - 1));
+        lightY = blockY + (bottom - 1);
 
-        if (direction == Direction.NORTH) {
-          lightingX = MathHelper.floor(blockX + left);
+        switch (direction) {
+          case NORTH -> lightX = blockX + left + correction;
+          case WEST -> lightZ = blockZ - right + correction;
+          case SOUTH -> lightX = blockX - right + correction;
+          case EAST -> lightZ = blockZ + left + correction;
         }
 
-        if (direction == Direction.WEST) {
-          lightingZ = MathHelper.floor(blockZ - right);
-        }
+        var lightPos = new BlockPos((int) lightX, (int) lightY, (int) lightZ);
+        var light = WorldRenderer.getLightmapCoordinates(entity.world, lightPos);
 
-        if (direction == Direction.SOUTH) {
-          lightingX = MathHelper.floor(blockX - right);
-        }
-
-        if (direction == Direction.EAST) {
-          lightingZ = MathHelper.floor(blockZ + left);
-        }
-
-        var lightmapCoordinates = WorldRenderer.getLightmapCoordinates(entity.world,
-          new BlockPos(lightingX, lightingY, lightingZ));
-
-        var scaledU1 = blockScaleX * (width - x - 1);
-        var scaledU0 = blockScaleX * (width - x);
-        var scaledV1 = blockScaleY * (height - y - 1);
-        var scaledV0 = blockScaleY * (height - y);
+        var u0 = scaleX * (width - x);
+        var u1 = scaleX * (width - x - 1);
+        var v0 = scaleY * (height - y);
+        var v1 = scaleY * (height - y - 1);
 
         // @formatter:off
-        this.vertex(matrix4f, matrix3f, vertexConsumer, left,  bottom, scaledU0, scaledV1, -WallOffset, 0, 0, -1, lightmapCoordinates);
-        this.vertex(matrix4f, matrix3f, vertexConsumer, right, bottom, scaledU1, scaledV1, -WallOffset, 0, 0, -1, lightmapCoordinates);
-        this.vertex(matrix4f, matrix3f, vertexConsumer, right, top,    scaledU1, scaledV0, -WallOffset, 0, 0, -1, lightmapCoordinates);
-        this.vertex(matrix4f, matrix3f, vertexConsumer, left,  top,    scaledU0, scaledV0, -WallOffset, 0, 0, -1, lightmapCoordinates);
+        this.vertex(m4f, m3f, consumer, left,  bottom, u0, v1, light);
+        this.vertex(m4f, m3f, consumer, right, bottom, u1, v1, light);
+        this.vertex(m4f, m3f, consumer, right, top,    u1, v0, light);
+        this.vertex(m4f, m3f, consumer, left,  top,    u0, v0, light);
         // @formatter:on
       }
     }
@@ -161,24 +155,20 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
   private void vertex(
     Matrix4f positionMatrix,
     Matrix3f normalMatrix,
-    VertexConsumer vertexConsumer,
+    VertexConsumer consumer,
     float x,
     float y,
     float u,
     float v,
-    float z,
-    int normalX,
-    int normalY,
-    int normalZ,
     int light
   ) {
-    vertexConsumer
-      .vertex(positionMatrix, x, y, z)
+    consumer
+      .vertex(positionMatrix, x, y, -WallOffset)
       .color(255, 255, 255, 255)
       .texture(u, v)
       .overlay(OverlayTexture.DEFAULT_UV)
       .light(light)
-      .normal(normalMatrix, (float) normalX, (float) normalY, (float) normalZ)
+      .normal(normalMatrix, 0f, 0f, -1f)
       .next();
   }
 }
