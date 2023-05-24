@@ -9,7 +9,6 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.config.ModConfig;
@@ -37,12 +36,12 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
       z *= 0.017453292F;
     }
 
-    float f = MathHelper.sin(0.5F * x);
-    float g = MathHelper.cos(0.5F * x);
-    float h = MathHelper.sin(0.5F * y);
-    float i = MathHelper.cos(0.5F * y);
-    float j = MathHelper.sin(0.5F * z);
-    float k = MathHelper.cos(0.5F * z);
+    var f = MathHelper.sin(0.5F * x);
+    var g = MathHelper.cos(0.5F * x);
+    var h = MathHelper.sin(0.5F * y);
+    var i = MathHelper.cos(0.5F * y);
+    var j = MathHelper.sin(0.5F * z);
+    var k = MathHelper.cos(0.5F * z);
 
     // @formatter:off
     return new Quaternionf(
@@ -67,8 +66,8 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
       return;
     }
 
-    float pitch = entity.getPitch();
-    float yaw = entity.getYaw();
+    var pitch = entity.getPitch();
+    var yaw = entity.getYaw();
 
     var width = entity.getRealWidth();
     var height = entity.getRealHeight();
@@ -87,49 +86,43 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
   private void drawTexture(
     MatrixStack matrices, VertexConsumer consumer, WickedPaintingEntity entity, int width, int height
   ) {
-    MatrixStack.Entry entry = matrices.peek();
+    var entry = matrices.peek();
 
-    Matrix4f m4f = entry.getPositionMatrix();
-    Matrix3f m3f = entry.getNormalMatrix();
+    var m4f = entry.getPositionMatrix();
+    var m3f = entry.getNormalMatrix();
 
-    var offsetX = (-width / 2f);
-    var offsetY = (-height / 2f);
+    var offsetX = -width / 2f;
+    var offsetY = -height / 2f;
 
     var scaleX = 1f / (float) width;
     var scaleY = 1f / (float) height;
 
-    var blockPos = entity.getBlockPos();
+    var lightX = entity.getBlockX();
+    var lightY = entity.getBlockY();
+    var lightZ = entity.getBlockZ();
 
-    var blockX = blockPos.getX();
-    var blockY = blockPos.getY();
-    var blockZ = blockPos.getZ();
-
-    var lightX = (float) blockX;
-    var lightY = (float) blockY;
-    var lightZ = (float) blockZ;
-
-    var correction = width % 2 == 0 ? 0 : 1;
-
-    for (int x = 0; x < width; ++x) {
-      for (int y = 0; y < height; ++y) {
+    for (var x = 0; x < width; ++x) {
+      for (var y = 0; y < height; ++y) {
         // without these +1s nothing renders
         var right = offsetX + x + 1;
         var left = offsetX + x;
         var bottom = offsetY + y + 1;
         var top = offsetY + y;
 
-        Direction direction = entity.getHorizontalFacing();
+        var direction = entity.getHorizontalFacing();
 
-        lightY = blockY + (bottom - 1);
+        lightX = entity.getBlockX();
+        lightY = MathHelper.floor(entity.getY() + (top + bottom) / 2.0F);
+        lightZ = entity.getBlockZ();
 
         switch (direction) {
-          case NORTH -> lightX = blockX + left + correction;
-          case WEST -> lightZ = blockZ - right + correction;
-          case SOUTH -> lightX = blockX - right + correction;
-          case EAST -> lightZ = blockZ + left + correction;
+          case NORTH -> lightX = MathHelper.floor(entity.getX() + (right + left) / 2.0F);
+          case WEST -> lightZ = MathHelper.floor(entity.getZ() - (right + left) / 2.0F);
+          case SOUTH -> lightX = MathHelper.floor(entity.getX() - (right + left) / 2.0F);
+          case EAST -> lightZ = MathHelper.floor(entity.getZ() + (right + left) / 2.0F);
         }
 
-        var lightPos = new BlockPos((int) lightX, (int) lightY, (int) lightZ);
+        var lightPos = new BlockPos(lightX, lightY, lightZ);
         var light = WorldRenderer.getLightmapCoordinates(entity.world, lightPos);
 
         var u0 = scaleX * (width - x);
