@@ -67,11 +67,6 @@ public class WickedPaintingItem extends DecorationItem {
   }
 
   @Override
-  public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-    tooltip.add(Text.translatable(getOrCreateTranslationKey() + ".tooltip"));
-  }
-
-  @Override
   public ActionResult useOnBlock(ItemUsageContext context) {
     BlockPos blockPos = context.getBlockPos();
     Direction direction = context.getSide();
@@ -131,5 +126,10 @@ public class WickedPaintingItem extends DecorationItem {
         return ActionResult.CONSUME;
       }
     }
+  }
+
+  @Override
+  public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
+    tooltip.add(Text.translatable(getOrCreateTranslationKey() + ".tooltip"));
   }
 }

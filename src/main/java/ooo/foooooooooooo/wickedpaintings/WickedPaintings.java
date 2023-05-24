@@ -26,15 +26,14 @@ import org.slf4j.LoggerFactory;
 
 public class WickedPaintings implements ModInitializer {
   public static final String MOD_ID = "wicked_paintings";
-  public static ScreenHandlerType<WickedGuiDescription> WICKED_SCREEN_HANDLER_TYPE;
   public static final Identifier GENERAL_GROUP_ID = new Identifier(MOD_ID, "general");
   public static final ItemGroup GENERAL_ITEM_GROUP = FabricItemGroup
     .builder(GENERAL_GROUP_ID)
     .displayName(Text.translatable("itemGroup.wicked_paintings.general"))
     .icon(() -> new ItemStack(ModItems.WICKED_PAINTING))
     .build();
-
   public static final Logger LOGGERS = LoggerFactory.getLogger(WickedPaintings.class);
+  public static ScreenHandlerType<WickedGuiDescription> WICKED_SCREEN_HANDLER_TYPE;
 
   @Override
   public void onInitialize() {

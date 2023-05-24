@@ -20,8 +20,20 @@ public class ServerBoundPackets {
     ServerPlayNetworking.registerGlobalReceiver(identifier, handler);
   }
 
-  public static void sendPacketToServer(WickedPacket packet) {
-    ClientPlayNetworking.send(packet.packetId(), packet.buffer());
+  private static void onWickedUpdate(ServerPlayerEntity player, PacketByteBuf buffer) {
+    var slot = buffer.readInt();
+    var url = buffer.readString();
+    var imageId = buffer.readIdentifier();
+    var width = buffer.readInt();
+    var height = buffer.readInt();
+
+    var painting = player.getInventory().getStack(slot);
+    var nbt = painting.getOrCreateNbt();
+
+    nbt.putString(NbtConstants.URL, url);
+    nbt.putString(NbtConstants.IMAGE_ID, imageId.toString());
+    nbt.putInt(NbtConstants.WIDTH, width);
+    nbt.putInt(NbtConstants.HEIGHT, height);
   }
 
   public static void sendWickedUpdate(int slot, String url, Identifier imageId, int width, int height) {
@@ -38,19 +50,7 @@ public class ServerBoundPackets {
     sendPacketToServer(packet);
   }
 
-  private static void onWickedUpdate(ServerPlayerEntity player, PacketByteBuf buffer) {
-    var slot = buffer.readInt();
-    var url = buffer.readString();
-    var imageId = buffer.readIdentifier();
-    var width = buffer.readInt();
-    var height = buffer.readInt();
-
-    var painting = player.getInventory().getStack(slot);
-    var nbt = painting.getOrCreateNbt();
-
-    nbt.putString(NbtConstants.URL, url);
-    nbt.putString(NbtConstants.IMAGE_ID, imageId.toString());
-    nbt.putInt(NbtConstants.WIDTH, width);
-    nbt.putInt(NbtConstants.HEIGHT, height);
+  public static void sendPacketToServer(WickedPacket packet) {
+    ClientPlayNetworking.send(packet.packetId(), packet.buffer());
   }
 }

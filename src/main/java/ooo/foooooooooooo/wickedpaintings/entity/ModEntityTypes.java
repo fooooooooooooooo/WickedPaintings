@@ -18,7 +18,8 @@ import ooo.foooooooooooo.wickedpaintings.client.render.WickedPaintingEntityRende
 public class ModEntityTypes {
   public static final EntityType<WickedPaintingEntity> WICKED_PAINTING = FabricEntityTypeBuilder
     .create(SpawnGroup.MISC,
-      (EntityType<WickedPaintingEntity> entityType, World world) -> new WickedPaintingEntity(entityType, world))
+      (EntityType<WickedPaintingEntity> entityType, World world) -> new WickedPaintingEntity(entityType, world)
+    )
     .dimensions(EntityDimensions.fixed(0.5F, 0.5F))
     .trackRangeBlocks(64)
     .trackedUpdateRate(2147483647)
@@ -28,12 +29,12 @@ public class ModEntityTypes {
     register(new Identifier(WickedPaintings.MOD_ID, "wicked_painting"), WICKED_PAINTING);
   }
 
+  private static <T extends Entity> void register(Identifier id, EntityType<T> type) {
+    Registry.register(Registries.ENTITY_TYPE, id, type);
+  }
+
   @Environment(EnvType.CLIENT)
   public static void registerRenderers() {
     EntityRendererRegistry.register(WICKED_PAINTING, WickedPaintingEntityRenderer::new);
-  }
-
-  private static <T extends Entity> void register(Identifier id, EntityType<T> type) {
-    Registry.register(Registries.ENTITY_TYPE, id, type);
   }
 }

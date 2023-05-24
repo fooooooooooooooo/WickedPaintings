@@ -8,7 +8,8 @@ public class ModNetworking {
   @Environment(EnvType.CLIENT)
   public static void registerClientBoundPackets() {
     ClientPlayNetworking.registerGlobalReceiver(Packets.WICKED_SPAWN,
-      (client, handler, buffer, sender) -> WickedEntitySpawnPacket.handle(client, handler, buffer));
+      (client, handler, buffer, sender) -> WickedEntitySpawnPacket.handle(client, handler, buffer)
+    );
   }
 
   public static void registerServerBoundPackets() {

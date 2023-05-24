@@ -29,30 +29,6 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     this.config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
   }
 
-  public static Quaternionf quaternionFromEulerAngles(float x, float y, float z, boolean degrees) {
-    if (degrees) {
-      x *= 0.017453292F;
-      y *= 0.017453292F;
-      z *= 0.017453292F;
-    }
-
-    var f = MathHelper.sin(0.5F * x);
-    var g = MathHelper.cos(0.5F * x);
-    var h = MathHelper.sin(0.5F * y);
-    var i = MathHelper.cos(0.5F * y);
-    var j = MathHelper.sin(0.5F * z);
-    var k = MathHelper.cos(0.5F * z);
-
-    // @formatter:off
-    return new Quaternionf(
-      f * i * k + g * h * j,
-      g * h * k - f * i * j,
-      f * h * k + g * i * j,
-      g * i * k - f * h * j
-    );
-    // @formatter:on
-  }
-
   @Override
   public void render(
     WickedPaintingEntity entity,
@@ -76,11 +52,35 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
 
     matrices.multiply(quaternionFromEulerAngles(180 - pitch, yaw, 180, true));
 
-    var consumer = consumerProvider.getBuffer(RenderLayer.getEntitySolid(this.getTexture(entity)));
+    var consumer = consumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(entity)));
 
     this.drawTexture(matrices, consumer, entity, width, height);
 
     matrices.pop();
+  }
+
+  public static Quaternionf quaternionFromEulerAngles(float x, float y, float z, boolean degrees) {
+    if (degrees) {
+      x *= 0.017453292F;
+      y *= 0.017453292F;
+      z *= 0.017453292F;
+    }
+
+    var f = MathHelper.sin(0.5F * x);
+    var g = MathHelper.cos(0.5F * x);
+    var h = MathHelper.sin(0.5F * y);
+    var i = MathHelper.cos(0.5F * y);
+    var j = MathHelper.sin(0.5F * z);
+    var k = MathHelper.cos(0.5F * z);
+
+    // @formatter:off
+    return new Quaternionf(
+      f * i * k + g * h * j,
+      g * h * k - f * i * j,
+      f * h * k + g * i * j,
+      g * i * k - f * h * j
+    );
+    // @formatter:on
   }
 
   private void drawTexture(
@@ -140,11 +140,6 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     }
   }
 
-  @Override
-  public Identifier getTexture(WickedPaintingEntity entity) {
-    return ImageManager.loadImage(entity.getImageId(), entity.getUrl()).getTextureId();
-  }
-
   private void vertex(
     Matrix4f positionMatrix,
     Matrix3f normalMatrix,
@@ -163,5 +158,10 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
       .light(light)
       .normal(normalMatrix, 0f, 0f, -1f)
       .next();
+  }
+
+  @Override
+  public Identifier getTexture(WickedPaintingEntity entity) {
+    return ImageManager.loadImage(entity.getImageId(), entity.getUrl()).getTextureId();
   }
 }

@@ -18,9 +18,9 @@ import ooo.foooooooooooo.wickedpaintings.network.ServerBoundPackets;
 
 public class WickedGuiDescription extends ItemSyncedGuiDescription {
   private final ImageWidget imageWidget;
+  private final int selectedSlot;
   private boolean invalidUrl = false;
   private Identifier imageId = new Identifier("wicked_image", "default");
-  private final int selectedSlot;
 
   @SuppressWarnings("CommentedOutCode")
   public WickedGuiDescription(int syncId, PlayerInventory playerInventory, StackReference stackRef) {
@@ -97,12 +97,13 @@ public class WickedGuiDescription extends ItemSyncedGuiDescription {
     root.validate(this);
   }
 
-  public int parseField(String text, int defaultValue) {
-    try {
-      return Integer.parseInt(text);
-    } catch (NumberFormatException e) {
-      return defaultValue;
-    }
+  public void onLoad(String url) {
+    var image = ImageManager.loadImage(url);
+
+    imageId = image.getTextureId();
+    setTexture(imageId);
+
+    invalidUrl = image.getImage() == null;
   }
 
   public void onApply(String url, int width, int height) {
@@ -120,13 +121,12 @@ public class WickedGuiDescription extends ItemSyncedGuiDescription {
     MinecraftClient.getInstance().setScreen(null);
   }
 
-  public void onLoad(String url) {
-    var image = ImageManager.loadImage(url);
-
-    imageId = image.getTextureId();
-    setTexture(imageId);
-
-    invalidUrl = image.getImage() == null;
+  public int parseField(String text, int defaultValue) {
+    try {
+      return Integer.parseInt(text);
+    } catch (NumberFormatException e) {
+      return defaultValue;
+    }
   }
 
   public void setTexture(Identifier texture) {

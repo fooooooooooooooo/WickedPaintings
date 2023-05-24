@@ -25,6 +25,13 @@ public class ImageManager {
     return loadImage(identifier, url);
   }
 
+  public static Identifier generateIdentifier(String url) {
+    var hash = url.hashCode();
+    var encoded = Integer.toHexString(hash);
+
+    return new Identifier(IMAGES_NAMESPACE, encoded.toLowerCase(Locale.ROOT));
+  }
+
   @NotNull
   public static LoadedImage loadImage(Identifier id, String url) {
     var validatedUrl = "";
@@ -61,12 +68,5 @@ public class ImageManager {
     instance.loadedImages.add(loadedImage);
 
     return loadedImage;
-  }
-
-  public static Identifier generateIdentifier(String url) {
-    var hash = url.hashCode();
-    var encoded = Integer.toHexString(hash);
-
-    return new Identifier(IMAGES_NAMESPACE, encoded.toLowerCase(Locale.ROOT));
   }
 }

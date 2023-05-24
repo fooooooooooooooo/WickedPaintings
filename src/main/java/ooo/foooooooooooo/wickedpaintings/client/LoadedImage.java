@@ -49,6 +49,11 @@ public class LoadedImage {
   }
 
   @Override
+  public int hashCode() {
+    return Objects.hash(imageId, url, width, height, image);
+  }
+
+  @Override
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;
@@ -60,35 +65,13 @@ public class LoadedImage {
 
     var that = (LoadedImage) obj;
 
-    return Objects.equals(this.imageId, that.imageId) &&
-           Objects.equals(this.url, that.url) &&
-           this.width == that.width &&
-           this.height == that.height &&
-           this.image == that.image;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(imageId, url, width, height, image);
+    return Objects.equals(this.imageId, that.imageId) && Objects.equals(this.url, that.url) &&
+           this.width == that.width && this.height == that.height && this.image == that.image;
   }
 
   @Override
   public String toString() {
-    return "LoadedImage["
-           + "identifier="
-           + imageId
-           + ", "
-           + "url="
-           + url
-           + ", "
-           + "width="
-           + width
-           + ", "
-           + "height="
-           + height
-           + ", "
-           + "image="
-           + image
-           + "]";
+    return "LoadedImage[" + "identifier=" + imageId + ", " + "url=" + url + ", " + "width=" + width + ", " + "height=" +
+           height + ", " + "image=" + image + "]";
   }
 }

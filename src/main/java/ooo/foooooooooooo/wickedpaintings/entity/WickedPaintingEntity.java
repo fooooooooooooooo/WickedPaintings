@@ -22,7 +22,8 @@ import ooo.foooooooooooo.wickedpaintings.network.WickedEntitySpawnPacket;
 import org.jetbrains.annotations.Nullable;
 
 public class WickedPaintingEntity extends AbstractDecorationEntity {
-  private String url = "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png";
+  private String url =
+    "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png";
   private int width = 16;
   private int height = 16;
   private Identifier imageId = ImageManager.DEFAULT_IMAGE_ID;
@@ -44,22 +45,20 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     return this.height;
   }
 
-  @Override
-  public int getWidthPixels() {
-    return this.width * 16;
-  }
-
-  @Override
-  public int getHeightPixels() {
-    return this.height * 16;
-  }
-
   public String getUrl() {
     return this.url;
   }
 
   public Identifier getImageId() {
     return imageId;
+  }
+
+  @Override
+  public NbtCompound writeNbt(NbtCompound nbt) {
+    super.writeNbt(nbt);
+    this.writeCustomDataToNbt(nbt);
+
+    return nbt;
   }
 
   @Override
@@ -93,31 +92,13 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
   }
 
   @Override
-  public NbtCompound writeNbt(NbtCompound nbt) {
-    super.writeNbt(nbt);
-    this.writeCustomDataToNbt(nbt);
-
-    return nbt;
+  public int getWidthPixels() {
+    return this.width * 16;
   }
 
   @Override
-  public void readNbt(NbtCompound nbt) {
-    super.readNbt(nbt);
-    this.readCustomDataFromNbt(nbt);
-  }
-
-  @Override
-  public Packet<ClientPlayPacketListener> createSpawnPacket() {
-    return WickedEntitySpawnPacket.createPacket(this);
-  }
-
-  @Override
-  public void onSpawnPacket(EntitySpawnS2CPacket packet) {
-    super.onSpawnPacket(packet);
-
-    if (packet instanceof WickedEntitySpawnPacket wickedPacket) {
-      this.readCustomDataFromNbt(wickedPacket.getCustomData());
-    }
+  public int getHeightPixels() {
+    return this.height * 16;
   }
 
   @Override
@@ -142,6 +123,26 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
   @Override
   public void onPlace() {
     this.playSound(SoundEvents.ENTITY_PAINTING_PLACE, 1.0F, 1.0F);
+  }
+
+  @Override
+  public void readNbt(NbtCompound nbt) {
+    super.readNbt(nbt);
+    this.readCustomDataFromNbt(nbt);
+  }
+
+  @Override
+  public Packet<ClientPlayPacketListener> createSpawnPacket() {
+    return WickedEntitySpawnPacket.createPacket(this);
+  }
+
+  @Override
+  public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+    super.onSpawnPacket(packet);
+
+    if (packet instanceof WickedEntitySpawnPacket wickedPacket) {
+      this.readCustomDataFromNbt(wickedPacket.getCustomData());
+    }
   }
 
   @Override
