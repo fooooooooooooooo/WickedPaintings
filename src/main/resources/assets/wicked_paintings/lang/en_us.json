@@ -13,5 +13,6 @@
   "itemGroup.wicked_paintings.general": "Wicked Paintings",
   "text.autoconfig.wicked_paintings.option.enabled": "Render Wicked Paintings",
   "text.autoconfig.wicked_paintings.sendMode": "Image sending mode",
-  "text.autoconfig.wicked_paintings.title": "Wicked Paintings"
+  "text.autoconfig.wicked_paintings.title": "Wicked Paintings",
+  "wicked_paintings": "Wicked Paintings"
 }
