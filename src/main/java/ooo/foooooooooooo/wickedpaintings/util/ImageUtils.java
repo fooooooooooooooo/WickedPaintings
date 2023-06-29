@@ -15,6 +15,7 @@ import java.awt.image.DataBufferByte;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -41,9 +42,20 @@ public class ImageUtils {
     }
   }
 
+  public static String generateNameFromUrl(String url){
+
+    // Replace useless chareacters with UNDERSCORE
+    String uniqueName = url.replace("://", "_").replace(".", "_").replace("/", "_");
+    // Replace last UNDERSCORE with a DOT
+    uniqueName = uniqueName.substring(0,uniqueName.lastIndexOf('_'))
+            +"."+uniqueName.substring(uniqueName.lastIndexOf('_')+1,uniqueName.length());
+    return uniqueName;
+}
+
   public static BufferedImage downloadBufImage(String url) throws IOException {
 
-    String shreded_url = url.substring(url.lastIndexOf('/')+1);
+    String shreded_url = generateNameFromUrl(url);
+    String shreded_url_extend = url.substring(url.lastIndexOf('.'));
 
     Path cache_derectory_String = FabricLoader.getInstance().getGameDir().resolve("wicked_paintings_cache");
     String cache_string_string = cache_derectory_String.resolve(shreded_url).toString();
@@ -61,17 +73,18 @@ public class ImageUtils {
         FileOutputStream imageFile = new FileOutputStream(cache_derectory_String.resolve(shreded_url).toString());
         ImageUtils.downloadImageFile(url,imageFile);
         imageFile.close();
-        url = "file://"+cache_string_string;
+        url = cache_string_string;
         WickedPaintings.LOGGERS.info("Successfully wrote to the file.");
       } catch (IOException e) {
         WickedPaintings.LOGGERS.error("An error occurred.");
         e.printStackTrace();
       }
     }else{
-      url = "file://"+cache_string_string;
+      url = cache_string_string;
     }
     
-    BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());
+    FileInputStream file = new FileInputStream(url);
+    BufferedInputStream inputStream = new BufferedInputStream(file);
 
     return ImageIO.read(inputStream);
   }
