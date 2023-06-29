@@ -13,6 +13,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -26,12 +28,8 @@ import org.slf4j.LoggerFactory;
 
 public class WickedPaintings implements ModInitializer {
   public static final String MOD_ID = "wicked_paintings";
-  public static final Identifier GENERAL_GROUP_ID = new Identifier(MOD_ID, "general");
-  public static final ItemGroup GENERAL_ITEM_GROUP = FabricItemGroup
-    .builder(GENERAL_GROUP_ID)
-    .displayName(Text.translatable("itemGroup.wicked_paintings.general"))
-    .icon(() -> new ItemStack(ModItems.WICKED_PAINTING))
-    .build();
+  public static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "general"));
+
   public static final Logger LOGGERS = LoggerFactory.getLogger(WickedPaintings.class);
   public static ScreenHandlerType<WickedGuiDescription> WICKED_SCREEN_HANDLER_TYPE;
 
@@ -39,6 +37,14 @@ public class WickedPaintings implements ModInitializer {
   public void onInitialize() {
     Log.info(LogCategory.LOG, "Loading Wicked Paintings");
     AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
+
+    var itemGroup = FabricItemGroup
+      .builder()
+      .displayName(Text.translatable("itemGroup.wicked_paintings.general"))
+      .icon(() -> new ItemStack(ModItems.WICKED_PAINTING))
+      .build();
+
+    Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, itemGroup);
 
     WICKED_SCREEN_HANDLER_TYPE = new ExtendedScreenHandlerType<>((syncId, inventory, buf) -> {
       var equipmentSlot = buf.readEnumConstant(EquipmentSlot.class);

@@ -22,8 +22,7 @@ import ooo.foooooooooooo.wickedpaintings.network.WickedEntitySpawnPacket;
 import org.jetbrains.annotations.Nullable;
 
 public class WickedPaintingEntity extends AbstractDecorationEntity {
-  private String url =
-    "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png";
+  private String url = "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png";
   private int width = 16;
   private int height = 16;
   private Identifier imageId = ImageManager.DEFAULT_IMAGE_ID;
@@ -103,7 +102,7 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
 
   @Override
   public void onBreak(@Nullable Entity entity) {
-    if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+    if (this.getWorld().getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
       this.playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0F, 1.0F);
 
       if (entity instanceof PlayerEntity playerEntity) {

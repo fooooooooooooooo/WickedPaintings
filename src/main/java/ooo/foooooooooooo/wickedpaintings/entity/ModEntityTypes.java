@@ -17,9 +17,7 @@ import ooo.foooooooooooo.wickedpaintings.client.render.WickedPaintingEntityRende
 
 public class ModEntityTypes {
   public static final EntityType<WickedPaintingEntity> WICKED_PAINTING = FabricEntityTypeBuilder
-    .create(SpawnGroup.MISC,
-      (EntityType<WickedPaintingEntity> entityType, World world) -> new WickedPaintingEntity(entityType, world)
-    )
+    .create(SpawnGroup.MISC, (EntityType<WickedPaintingEntity> entityType, World world) -> new WickedPaintingEntity(entityType, world))
     .dimensions(EntityDimensions.fixed(0.5F, 0.5F))
     .trackRangeBlocks(64)
     .trackedUpdateRate(2147483647)

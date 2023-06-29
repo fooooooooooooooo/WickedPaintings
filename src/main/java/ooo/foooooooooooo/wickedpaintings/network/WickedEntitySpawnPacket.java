@@ -41,17 +41,17 @@ public class WickedEntitySpawnPacket extends EntitySpawnS2CPacket {
     return ServerPlayNetworking.createS2CPacket(Packets.WICKED_SPAWN, passedData);
   }
 
-  public void write(PacketByteBuf buf) {
-    super.write(buf);
-    buf.writeNbt(this.customData);
-    buf.writeByte(this.facing.getHorizontal());
-  }
-
   @Environment(EnvType.CLIENT)
   public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer) {
     var packet = new WickedEntitySpawnPacket(buffer);
 
     client.execute(() -> handler.onEntitySpawn(packet));
+  }
+
+  public void write(PacketByteBuf buf) {
+    super.write(buf);
+    buf.writeNbt(this.customData);
+    buf.writeByte(this.facing.getHorizontal());
   }
 
   public NbtCompound getCustomData() {

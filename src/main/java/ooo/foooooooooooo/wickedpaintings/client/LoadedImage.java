@@ -65,13 +65,15 @@ public class LoadedImage {
 
     var that = (LoadedImage) obj;
 
-    return Objects.equals(this.imageId, that.imageId) && Objects.equals(this.url, that.url) &&
-           this.width == that.width && this.height == that.height && this.image == that.image;
+    return Objects.equals(this.imageId, that.imageId) &&
+           Objects.equals(this.url, that.url) &&
+           this.width == that.width &&
+           this.height == that.height &&
+           this.image == that.image;
   }
 
   @Override
   public String toString() {
-    return "LoadedImage[" + "identifier=" + imageId + ", " + "url=" + url + ", " + "width=" + width + ", " + "height=" +
-           height + ", " + "image=" + image + "]";
+    return "LoadedImage[" + "identifier=" + imageId + ", " + "url=" + url + ", " + "width=" + width + ", " + "height=" + height + ", " + "image=" + image + "]";
   }
 }
