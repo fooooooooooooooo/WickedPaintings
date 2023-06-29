@@ -28,7 +28,12 @@ import org.slf4j.LoggerFactory;
 
 public class WickedPaintings implements ModInitializer {
   public static final String MOD_ID = "wicked_paintings";
-  public static final RegistryKey<ItemGroup> ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "general"));
+  public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, "general"));
+  public static final ItemGroup ITEM_GROUP = FabricItemGroup
+    .builder()
+    .displayName(Text.translatable("itemGroup.wicked_paintings.general"))
+    .icon(() -> new ItemStack(ModItems.WICKED_PAINTING))
+    .build();
 
   public static final Logger LOGGERS = LoggerFactory.getLogger(WickedPaintings.class);
   public static ScreenHandlerType<WickedGuiDescription> WICKED_SCREEN_HANDLER_TYPE;
@@ -38,13 +43,7 @@ public class WickedPaintings implements ModInitializer {
     Log.info(LogCategory.LOG, "Loading Wicked Paintings");
     AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
 
-    var itemGroup = FabricItemGroup
-      .builder()
-      .displayName(Text.translatable("itemGroup.wicked_paintings.general"))
-      .icon(() -> new ItemStack(ModItems.WICKED_PAINTING))
-      .build();
-
-    Registry.register(Registries.ITEM_GROUP, ITEM_GROUP, itemGroup);
+    Registry.register(Registries.ITEM_GROUP, ITEM_GROUP_KEY, ITEM_GROUP);
 
     WICKED_SCREEN_HANDLER_TYPE = new ExtendedScreenHandlerType<>((syncId, inventory, buf) -> {
       var equipmentSlot = buf.readEnumConstant(EquipmentSlot.class);

@@ -22,6 +22,6 @@ public class ModItems {
   public static void register(Item item, String name) {
     Registry.register(Registries.ITEM, new Identifier(WickedPaintings.MOD_ID, name), item);
 
-//    ItemGroupEvents.modifyEntriesEvent(WickedPaintings.ITEM_GROUP).register(entries -> entries.add(item));
+    ItemGroupEvents.modifyEntriesEvent(WickedPaintings.ITEM_GROUP_KEY).register(entries -> entries.add(item));
   }
 }
