@@ -83,9 +83,7 @@ public class WickedPaintingItem extends DecorationItem {
       var nbt = itemStack.getOrCreateNbt();
 
       if (nbt.getString(NbtConstants.URL) == null || nbt.getString(NbtConstants.URL).isEmpty()) {
-        nbt.putString(NbtConstants.URL,
-          "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png"
-        );
+        nbt.putString(NbtConstants.URL, "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png");
 
         nbt.putString(NbtConstants.IMAGE_ID, ImageManager.DEFAULT_IMAGE_ID.toString());
       }

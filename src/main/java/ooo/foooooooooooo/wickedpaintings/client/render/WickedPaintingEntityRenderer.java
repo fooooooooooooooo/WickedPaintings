@@ -29,36 +29,6 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     this.config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
   }
 
-  @Override
-  public void render(
-    WickedPaintingEntity entity,
-    float _yaw,
-    float tickDelta,
-    MatrixStack matrices,
-    VertexConsumerProvider consumerProvider,
-    int light
-  ) {
-    if (!config.enabled) {
-      return;
-    }
-
-    var pitch = entity.getPitch();
-    var yaw = entity.getYaw();
-
-    var width = entity.getRealWidth();
-    var height = entity.getRealHeight();
-
-    matrices.push();
-
-    matrices.multiply(quaternionFromEulerAngles(180 - pitch, yaw, 180, true));
-
-    var consumer = consumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(entity)));
-
-    this.drawTexture(matrices, consumer, entity, width, height);
-
-    matrices.pop();
-  }
-
   public static Quaternionf quaternionFromEulerAngles(float x, float y, float z, boolean degrees) {
     if (degrees) {
       x *= 0.017453292F;
@@ -83,9 +53,30 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     // @formatter:on
   }
 
-  private void drawTexture(
-    MatrixStack matrices, VertexConsumer consumer, WickedPaintingEntity entity, int width, int height
-  ) {
+  @Override
+  public void render(WickedPaintingEntity entity, float _yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider consumerProvider, int light) {
+    if (!config.enabled) {
+      return;
+    }
+
+    var pitch = entity.getPitch();
+    var yaw = entity.getYaw();
+
+    var width = entity.getRealWidth();
+    var height = entity.getRealHeight();
+
+    matrices.push();
+
+    matrices.multiply(quaternionFromEulerAngles(180 - pitch, yaw, 180, true));
+
+    var consumer = consumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(entity)));
+
+    this.drawTexture(matrices, consumer, entity, width, height);
+
+    matrices.pop();
+  }
+
+  private void drawTexture(MatrixStack matrices, VertexConsumer consumer, WickedPaintingEntity entity, int width, int height) {
     var entry = matrices.peek();
 
     var m4f = entry.getPositionMatrix();
@@ -123,7 +114,7 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
         }
 
         var lightPos = new BlockPos(lightX, lightY, lightZ);
-        var light = WorldRenderer.getLightmapCoordinates(entity.world, lightPos);
+        var light = WorldRenderer.getLightmapCoordinates(entity.getWorld(), lightPos);
 
         var u0 = scaleX * (width - x);
         var u1 = scaleX * (width - x - 1);
@@ -140,16 +131,7 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     }
   }
 
-  private void vertex(
-    Matrix4f positionMatrix,
-    Matrix3f normalMatrix,
-    VertexConsumer consumer,
-    float x,
-    float y,
-    float u,
-    float v,
-    int light
-  ) {
+  private void vertex(Matrix4f positionMatrix, Matrix3f normalMatrix, VertexConsumer consumer, float x, float y, float u, float v, int light) {
     consumer
       .vertex(positionMatrix, x, y, -WallOffset)
       .color(255, 255, 255, 255)

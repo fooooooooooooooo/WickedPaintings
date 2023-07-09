@@ -87,10 +87,7 @@ public class WickedGuiDescription extends ItemSyncedGuiDescription {
     root.add(loadButton, guiWidth - 9, 16, 4, 2);
 
     var applyButton = new WButton(Text.translatable("gui.wicked_paintings.apply_button"));
-    applyButton.setOnClick(() -> onApply(urlField.getText(),
-      parseField(widthField.getText(), 1),
-      parseField(heightField.getText(), 1)
-    ));
+    applyButton.setOnClick(() -> onApply(urlField.getText(), parseField(widthField.getText(), 1), parseField(heightField.getText(), 1)));
 
     root.add(applyButton, guiWidth - 4, 16, 4, 2);
 

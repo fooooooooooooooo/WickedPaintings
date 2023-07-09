@@ -48,9 +48,6 @@ public class ImageUtils {
 
     NativeImageBackedTexture finalTexture = texture;
 
-    MinecraftClient
-      .getInstance()
-      .execute(() -> MinecraftClient.getInstance().getTextureManager().registerTexture(identifier, finalTexture));
+    MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().getTextureManager().registerTexture(identifier, finalTexture));
   }
 }
-
