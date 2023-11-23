@@ -8,9 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 import ooo.foooooooooooo.wickedpaintings.client.render.WickedPaintingEntityRenderer;
@@ -28,7 +27,7 @@ public class ModEntityTypes {
   }
 
   private static <T extends Entity> void register(Identifier id, EntityType<T> type) {
-    Registry.register(Registries.ENTITY_TYPE, id, type);
+    Registry.register(Registry.ENTITY_TYPE, id, type);
   }
 
   @Environment(EnvType.CLIENT)

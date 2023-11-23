@@ -1,33 +1,32 @@
 package ooo.foooooooooooo.wickedpaintings.client.screen;
 
-import io.github.cottonmc.cotton.gui.ItemSyncedGuiDescription;
+import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
 import io.github.cottonmc.cotton.gui.widget.data.Insets;
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.StackReference;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.NbtConstants;
-import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
 import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.network.ServerBoundPackets;
 
-public class WickedGuiDescription extends ItemSyncedGuiDescription {
+public class WickedGuiDescription extends LightweightGuiDescription {
   private final ImageWidget imageWidget;
-  private final int selectedSlot;
+  private final Hand hand;
+  private final PlayerEntity player;
   private boolean invalidUrl = false;
   private Identifier imageId = new Identifier("wicked_image", "default");
 
   @SuppressWarnings("CommentedOutCode")
-  public WickedGuiDescription(int syncId, PlayerInventory playerInventory, StackReference stackRef) {
-    super(WickedPaintings.WICKED_SCREEN_HANDLER_TYPE, syncId, playerInventory, stackRef);
-
-    selectedSlot = playerInventory.selectedSlot;
-    var stack = stackRef.get();
+  public WickedGuiDescription(Hand hand, PlayerEntity player, ItemStack stack) {
+    this.hand = hand;
+    this.player = player;
 
     var root = new WGridPanel(9);
 
@@ -111,9 +110,9 @@ public class WickedGuiDescription extends ItemSyncedGuiDescription {
 
     onLoad(url);
 
-    // int slot = this.hand == Hand.MAIN_HAND ? this.player.getInventory().selectedSlot : 40;
+    int slot = this.hand == Hand.MAIN_HAND ? this.player.getInventory().selectedSlot : 40;
 
-    ServerBoundPackets.sendWickedUpdate(selectedSlot, url, imageId, width, height);
+    ServerBoundPackets.sendWickedUpdate(slot, url, imageId, width, height);
 
     MinecraftClient.getInstance().setScreen(null);
   }

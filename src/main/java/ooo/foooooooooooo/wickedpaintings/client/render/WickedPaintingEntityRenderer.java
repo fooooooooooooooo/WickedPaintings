@@ -8,14 +8,10 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.config.ModConfig;
 import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 @Environment(EnvType.CLIENT)
 public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingEntity> {
@@ -29,7 +25,7 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     this.config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
   }
 
-  public static Quaternionf quaternionFromEulerAngles(float x, float y, float z, boolean degrees) {
+  public static Quaternion quaternionFromEulerAngles(float x, float y, float z, boolean degrees) {
     if (degrees) {
       x *= 0.017453292F;
       y *= 0.017453292F;
@@ -44,7 +40,7 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     var k = MathHelper.cos(0.5F * z);
 
     // @formatter:off
-    return new Quaternionf(
+    return new Quaternion(
       f * i * k + g * h * j,
       g * h * k - f * i * j,
       f * h * k + g * i * j,
