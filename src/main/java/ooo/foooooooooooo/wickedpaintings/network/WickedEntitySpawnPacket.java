@@ -38,7 +38,20 @@ public class WickedEntitySpawnPacket extends EntitySpawnS2CPacket {
   public static Packet<ClientPlayPacketListener> createPacket(WickedPaintingEntity entity) {
     var passedData = new PacketByteBuf(Unpooled.buffer());
     new WickedEntitySpawnPacket(entity, entity.getId()).write(passedData);
-    return ServerPlayNetworking.createS2CPacket(Packets.WICKED_SPAWN, passedData);
+    var packet = ServerPlayNetworking.createS2CPacket(Packets.WICKED_SPAWN, passedData);
+
+    // this is insane
+    return new Packet<>() {
+      @Override
+      public void write(PacketByteBuf buf) {
+        packet.write(buf);
+      }
+
+      @Override
+      public void apply(ClientPlayPacketListener listener) {
+        packet.apply(listener);
+      }
+    };
   }
 
   @Environment(EnvType.CLIENT)
