@@ -8,7 +8,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.math.Direction;
@@ -35,23 +34,11 @@ public class WickedEntitySpawnPacket extends EntitySpawnS2CPacket {
     this.facing = Direction.fromHorizontal(buf.readByte());
   }
 
-  public static Packet<ClientPlayPacketListener> createPacket(WickedPaintingEntity entity) {
+  public static Packet<?> createPacket(WickedPaintingEntity entity) {
     var passedData = new PacketByteBuf(Unpooled.buffer());
     new WickedEntitySpawnPacket(entity, entity.getId()).write(passedData);
-    var packet = ServerPlayNetworking.createS2CPacket(Packets.WICKED_SPAWN, passedData);
 
-    // this is insane
-    return new Packet<>() {
-      @Override
-      public void write(PacketByteBuf buf) {
-        packet.write(buf);
-      }
-
-      @Override
-      public void apply(ClientPlayPacketListener listener) {
-        packet.apply(listener);
-      }
-    };
+    return ServerPlayNetworking.createS2CPacket(Packets.WICKED_SPAWN, passedData);
   }
 
   @Environment(EnvType.CLIENT)

@@ -130,9 +130,11 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
     this.readCustomDataFromNbt(nbt);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Packet<ClientPlayPacketListener> createSpawnPacket() {
-    return WickedEntitySpawnPacket.createPacket(this);
+    // why
+    return (Packet<ClientPlayPacketListener>) WickedEntitySpawnPacket.createPacket(this);
   }
 
   @Override
