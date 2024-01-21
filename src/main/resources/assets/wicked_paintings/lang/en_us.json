@@ -14,6 +14,7 @@
   "itemGroup.wicked_paintings.general": "Wicked Paintings",
   "text.autoconfig.wicked_paintings.option.enabled": "Render Wicked Paintings",
   "text.autoconfig.wicked_paintings.option.maxSizeMb": "Maximum image size (MB) (0 = unlimited)",
+  "text.autoconfig.wicked_paintings.option.debug": "Enable debugging info",
   "text.autoconfig.wicked_paintings.sendMode": "Image sending mode",
   "text.autoconfig.wicked_paintings.title": "Wicked Paintings",
   "wicked_paintings": "Wicked Paintings"

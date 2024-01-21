@@ -13,6 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.NbtConstants;
 import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
+import ooo.foooooooooooo.wickedpaintings.WickedPaintingsClient;
 import ooo.foooooooooooo.wickedpaintings.network.ServerBoundPackets;
 
 import static ooo.foooooooooooo.wickedpaintings.util.ImageUtils.*;
@@ -23,7 +24,6 @@ public class WickedGuiDescription extends ItemSyncedGuiDescription {
   private boolean invalidUrl = false;
   private Identifier imageId = DEFAULT_TEX;
 
-  @SuppressWarnings("CommentedOutCode")
   public WickedGuiDescription(int syncId, PlayerInventory playerInventory, StackReference stackRef) {
     super(WickedPaintings.WICKED_SCREEN_HANDLER_TYPE, syncId, playerInventory, stackRef);
 
@@ -76,12 +76,14 @@ public class WickedGuiDescription extends ItemSyncedGuiDescription {
     urlField.setText(url);
     root.add(urlField, 0, 12, guiWidth, 2);
 
-    // var debugLabel = new WDynamicLabel(() -> this.imageId.toString());
-    // root.add(debugLabel, 0, 10, 0, 1);
+    if (WickedPaintingsClient.CONFIG.debug) {
+      var debugLabel = new WDynamicLabel(() -> this.imageId.toString());
+      root.add(debugLabel, 0, 10, 0, 1);
+    }
 
     var urlLabel = new WDynamicLabel(() -> invalidUrl ? I18n.translate("gui.wicked_paintings.url_label_invalid") : "");
     urlLabel.setColor(0xFF0F0F, 0xFF1F1F);
-    root.add(urlLabel, 0, 14, 0, 1);
+    root.add(urlLabel, 0, 16, 0, 1);
 
     var loadButton = new WButton(Text.translatable("gui.wicked_paintings.load_button"));
     loadButton.setOnClick(() -> onLoad(urlField.getText()));

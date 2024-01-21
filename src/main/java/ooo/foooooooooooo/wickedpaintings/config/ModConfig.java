@@ -9,6 +9,8 @@ public class ModConfig implements ConfigData {
   public boolean enabled = true;
   public int maxSizeMb = 128;
 
+  public boolean debug = false;
+
   public long maxSizeBytes() {
     return maxSizeMb * 1024L * 1024L;
   }
