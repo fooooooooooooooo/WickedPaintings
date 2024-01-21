@@ -16,16 +16,17 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import ooo.foooooooooooo.wickedpaintings.NbtConstants;
-import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.item.ModItems;
 import ooo.foooooooooooo.wickedpaintings.network.WickedEntitySpawnPacket;
 import org.jetbrains.annotations.Nullable;
 
+import static ooo.foooooooooooo.wickedpaintings.util.ImageUtils.DEFAULT_TEX;
+
 public class WickedPaintingEntity extends AbstractDecorationEntity {
-  private String url = "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png";
+  private String url = "";
   private int width = 16;
   private int height = 16;
-  private Identifier imageId = ImageManager.DEFAULT_IMAGE_ID;
+  private Identifier imageId = DEFAULT_TEX;
 
   public WickedPaintingEntity(EntityType<? extends AbstractDecorationEntity> entityType, World world) {
     super(entityType, world);
@@ -76,7 +77,6 @@ public class WickedPaintingEntity extends AbstractDecorationEntity {
 
   @Override
   public void readCustomDataFromNbt(NbtCompound nbt) {
-
     this.setFacing(Direction.fromHorizontal(nbt.getByte(NbtConstants.FACING)));
 
     this.url = nbt.getString(NbtConstants.URL);

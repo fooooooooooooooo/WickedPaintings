@@ -1,53 +1,43 @@
 package ooo.foooooooooooo.wickedpaintings.util;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.util.Identifier;
-import org.lwjgl.BufferUtils;
+import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
+import ooo.foooooooooooo.wickedpaintings.client.PaintingTexture;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.ByteBuffer;
+import java.net.MalformedURLException;
+import java.util.Locale;
 
 public class ImageUtils {
-  public static ImageData downloadImage(String url) throws IOException {
-    BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());
-    BufferedImage bufferedImage = ImageIO.read(inputStream);
+  public static final String IMAGES_NAMESPACE = "wicked_image";
+  public static final Identifier DEFAULT_TEX = new Identifier(WickedPaintings.MOD_ID, "textures/block/wicked_painting/default.png");
+  public static final Identifier BLOCKED_TEX = new Identifier(WickedPaintings.MOD_ID, "textures/block/wicked_painting/blocked.png");
 
-    var pixels = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
-    return new ImageData(pixels);
-  }
+  public static Identifier getOrLoadImage(Identifier id, String url) {
+    var manager = MinecraftClient.getInstance().getTextureManager();
+    var texture = manager.getOrDefault(id, null);
 
-  public static BufferedImage downloadBufImage(String url) throws IOException {
-    BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());
+    if (texture == null) {
+      try {
+        var painting = new PaintingTexture(url);
 
-    return ImageIO.read(inputStream);
-  }
+        if (painting.tooLarge) {
+          return BLOCKED_TEX;
+        }
 
-  public static void saveBufferedImageAsIdentifier(BufferedImage bufferedImage, Identifier identifier) {
-    NativeImageBackedTexture texture;
-
-    try {
-      ByteArrayOutputStream stream = new ByteArrayOutputStream();
-      ImageIO.write(bufferedImage, "png", stream);
-      byte[] bytes = stream.toByteArray();
-
-      ByteBuffer data = BufferUtils.createByteBuffer(bytes.length).put(bytes);
-      data.flip();
-      NativeImage img = NativeImage.read(data);
-      texture = new NativeImageBackedTexture(img);
-    } catch (Exception e) {
-      texture = new NativeImageBackedTexture(new NativeImage(1, 1, false));
+        manager.registerTexture(id, painting);
+      } catch (MalformedURLException e) {
+        return DEFAULT_TEX;
+      }
     }
 
-    NativeImageBackedTexture finalTexture = texture;
+    return id;
+  }
 
-    MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().getTextureManager().registerTexture(identifier, finalTexture));
+  public static Identifier generateImageId(String url) {
+    var hash = url.hashCode();
+    var encoded = Integer.toHexString(hash);
+
+    return new Identifier(IMAGES_NAMESPACE, encoded.toLowerCase(Locale.ROOT));
   }
 }

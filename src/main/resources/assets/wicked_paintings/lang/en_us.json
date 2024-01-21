@@ -1,5 +1,6 @@
 {
   "entity.wicked_paintings.wicked_painting": "Wicked Painting",
+  "gui.wicked_paintings.title": "WICKED",
   "gui.wicked_paintings.apply_button": "Apply",
   "gui.wicked_paintings.image_height": "Painting height",
   "gui.wicked_paintings.image_height_placeholder": "",
@@ -12,6 +13,7 @@
   "item.wicked_paintings.wicked_painting.tooltip": "Right click the air",
   "itemGroup.wicked_paintings.general": "Wicked Paintings",
   "text.autoconfig.wicked_paintings.option.enabled": "Render Wicked Paintings",
+  "text.autoconfig.wicked_paintings.option.maxSizeMb": "Maximum image size (MB) (0 = unlimited)",
   "text.autoconfig.wicked_paintings.sendMode": "Image sending mode",
   "text.autoconfig.wicked_paintings.title": "Wicked Paintings",
   "wicked_paintings": "Wicked Paintings"

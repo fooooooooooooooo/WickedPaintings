@@ -13,14 +13,15 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.NbtConstants;
 import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
-import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.network.ServerBoundPackets;
+
+import static ooo.foooooooooooo.wickedpaintings.util.ImageUtils.*;
 
 public class WickedGuiDescription extends ItemSyncedGuiDescription {
   private final ImageWidget imageWidget;
   private final int selectedSlot;
   private boolean invalidUrl = false;
-  private Identifier imageId = new Identifier("wicked_image", "default");
+  private Identifier imageId = DEFAULT_TEX;
 
   @SuppressWarnings("CommentedOutCode")
   public WickedGuiDescription(int syncId, PlayerInventory playerInventory, StackReference stackRef) {
@@ -66,7 +67,7 @@ public class WickedGuiDescription extends ItemSyncedGuiDescription {
     this.imageWidget = imageWidget;
     root.add(imageWidget, guiWidth - 10, 1, 10, 10);
 
-    var title = new WLabel(Text.literal("WICKED"), 0x0);
+    var title = new WLabel(Text.translatable("gui.wicked_paintings.title"), 0x0);
     title.setHorizontalAlignment(HorizontalAlignment.CENTER);
     root.add(title, 0, 0, guiWidth, 1);
 
@@ -95,12 +96,10 @@ public class WickedGuiDescription extends ItemSyncedGuiDescription {
   }
 
   public void onLoad(String url) {
-    var image = ImageManager.loadImage(url);
-
-    imageId = image.getTextureId();
+    imageId = getOrLoadImage(generateImageId(url), url);
     setTexture(imageId);
 
-    invalidUrl = image.getImage() == null;
+    invalidUrl = imageId == DEFAULT_TEX;
   }
 
   public void onApply(String url, int width, int height) {
@@ -110,8 +109,6 @@ public class WickedGuiDescription extends ItemSyncedGuiDescription {
     }
 
     onLoad(url);
-
-    // int slot = this.hand == Hand.MAIN_HAND ? this.player.getInventory().selectedSlot : 40;
 
     ServerBoundPackets.sendWickedUpdate(selectedSlot, url, imageId, width, height);
 
