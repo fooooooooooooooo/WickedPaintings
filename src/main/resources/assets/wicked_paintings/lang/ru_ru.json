@@ -1,1 +1,18 @@
-
+{
+  "entity.wicked_paintings.wicked_painting": "Потрясающая картина",
+  "gui.wicked_paintings.apply_button": "Применить",
+  "gui.wicked_paintings.image_height": "Высота картины",
+  "gui.wicked_paintings.image_height_placeholder": "",
+  "gui.wicked_paintings.image_width": "Ширина картины",
+  "gui.wicked_paintings.image_width_placeholder": "",
+  "gui.wicked_paintings.load_button": "Загрузить",
+  "gui.wicked_paintings.url_label_invalid": "Неверный URL",
+  "gui.wicked_paintings.url_placeholder": "URL изображения",
+  "item.wicked_paintings.wicked_painting": "Потрясающая картина",
+  "item.wicked_paintings.wicked_painting.tooltip": "Кликните ПКМ по воздуху",
+  "itemGroup.wicked_paintings.general": "Потрясающие картины",
+  "text.autoconfig.wicked_paintings.option.enabled": "Отображать потрясающие картины",
+  "text.autoconfig.wicked_paintings.sendMode": "Режим отправки изображения",
+  "text.autoconfig.wicked_paintings.title": "Потрясающие картины",
+  "wicked_paintings": "Потрясающие картины"
+}
