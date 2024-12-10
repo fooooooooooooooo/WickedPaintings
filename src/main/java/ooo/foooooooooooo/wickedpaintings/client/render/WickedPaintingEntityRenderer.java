@@ -14,7 +14,6 @@ import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
-
 import static ooo.foooooooooooo.wickedpaintings.util.ImageUtils.DEFAULT_TEX;
 import static ooo.foooooooooooo.wickedpaintings.util.ImageUtils.getOrLoadImage;
 
@@ -29,26 +28,12 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
 
   public static Quaternionf quaternionFromEulerAngles(float x, float y, float z, boolean degrees) {
     if (degrees) {
-      x *= 0.017453292F;
-      y *= 0.017453292F;
-      z *= 0.017453292F;
+      x *= MathHelper.RADIANS_PER_DEGREE;
+      y *= MathHelper.RADIANS_PER_DEGREE;
+      z *= MathHelper.RADIANS_PER_DEGREE;
     }
 
-    var f = MathHelper.sin(0.5F * x);
-    var g = MathHelper.cos(0.5F * x);
-    var h = MathHelper.sin(0.5F * y);
-    var i = MathHelper.cos(0.5F * y);
-    var j = MathHelper.sin(0.5F * z);
-    var k = MathHelper.cos(0.5F * z);
-
-    // @formatter:off
-    return new Quaternionf(
-      f * i * k + g * h * j,
-      g * h * k - f * i * j,
-      f * h * k + g * i * j,
-      g * i * k - f * h * j
-    );
-    // @formatter:on
+    return new Quaternionf(0, 0, 0, 1).rotateXYZ(x, y, z);
   }
 
   @Override
@@ -79,6 +64,7 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     return DEFAULT_TEX;
   }
 
+  @SuppressWarnings("incomplete-switch")
   private void drawTexture(MatrixStack matrices, VertexConsumer consumer, WickedPaintingEntity entity, int width, int height) {
     var entry = matrices.peek();
 
@@ -88,8 +74,8 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
     var offsetX = -width / 2f;
     var offsetY = -height / 2f;
 
-    var scaleX = 1f / (float) width;
-    var scaleY = 1f / (float) height;
+    var scaleX = 1f / width;
+    var scaleY = 1f / height;
 
     var lightX = entity.getBlockX();
     var lightY = entity.getBlockY();
