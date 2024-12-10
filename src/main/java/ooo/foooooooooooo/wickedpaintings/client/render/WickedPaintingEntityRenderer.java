@@ -1,6 +1,5 @@
 package ooo.foooooooooooo.wickedpaintings.client.render;
 
-import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.*;
@@ -10,23 +9,22 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
-import ooo.foooooooooooo.wickedpaintings.config.ModConfig;
+import ooo.foooooooooooo.wickedpaintings.WickedPaintingsClient;
 import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
+import static ooo.foooooooooooo.wickedpaintings.util.ImageUtils.DEFAULT_TEX;
+import static ooo.foooooooooooo.wickedpaintings.util.ImageUtils.getOrLoadImage;
+
 @Environment(EnvType.CLIENT)
 public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingEntity> {
   // doesn't z fight at 500% entity distance
   private static final float WallOffset = -0.02f;
-  private final ModConfig config;
 
   public WickedPaintingEntityRenderer(EntityRendererFactory.Context context) {
     super(context);
-
-    this.config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
   }
 
   public static Quaternionf quaternionFromEulerAngles(float x, float y, float z, boolean degrees) {
@@ -55,7 +53,7 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
 
   @Override
   public void render(WickedPaintingEntity entity, float _yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider consumerProvider, int light) {
-    if (!config.enabled) {
+    if (!WickedPaintingsClient.CONFIG.enabled) {
       return;
     }
 
@@ -69,11 +67,16 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
 
     matrices.multiply(quaternionFromEulerAngles(180 - pitch, yaw, 180, true));
 
-    var consumer = consumerProvider.getBuffer(RenderLayer.getEntityTranslucent(this.getTexture(entity)));
+    var consumer = consumerProvider.getBuffer(this.getRenderLayer(entity));
 
     this.drawTexture(matrices, consumer, entity, width, height);
 
     matrices.pop();
+  }
+
+  @Override
+  public Identifier getTexture(WickedPaintingEntity entity) {
+    return DEFAULT_TEX;
   }
 
   private void drawTexture(MatrixStack matrices, VertexConsumer consumer, WickedPaintingEntity entity, int width, int height) {
@@ -94,11 +97,10 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
 
     for (var x = 0; x < width; ++x) {
       for (var y = 0; y < height; ++y) {
-        // without these +1s nothing renders
-        var right = offsetX + x + 1;
-        var left = offsetX + x;
-        var bottom = offsetY + y + 1;
-        var top = offsetY + y;
+        var left = x + offsetX;
+        var right = left + 1;
+        var top = y + offsetY;
+        var bottom = top + 1;
 
         var direction = entity.getHorizontalFacing();
 
@@ -142,8 +144,7 @@ public class WickedPaintingEntityRenderer extends EntityRenderer<WickedPaintingE
       .next();
   }
 
-  @Override
-  public Identifier getTexture(WickedPaintingEntity entity) {
-    return ImageManager.loadImage(entity.getImageId(), entity.getUrl()).getTextureId();
+  public RenderLayer getRenderLayer(WickedPaintingEntity entity) {
+    return RenderLayer.getEntityTranslucent(getOrLoadImage(entity.getImageId(), entity.getUrl()));
   }
 }
