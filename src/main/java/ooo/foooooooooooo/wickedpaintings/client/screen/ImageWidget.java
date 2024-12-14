@@ -3,7 +3,6 @@ package ooo.foooooooooooo.wickedpaintings.client.screen;
 import io.github.cottonmc.cotton.gui.client.ScreenDrawing;
 import io.github.cottonmc.cotton.gui.widget.WWidget;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 public class ImageWidget extends WWidget {

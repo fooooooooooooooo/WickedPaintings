@@ -23,12 +23,13 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import ooo.foooooooooooo.wickedpaintings.NbtConstants;
-import ooo.foooooooooooo.wickedpaintings.client.ImageManager;
 import ooo.foooooooooooo.wickedpaintings.client.screen.WickedGuiDescription;
 import ooo.foooooooooooo.wickedpaintings.entity.ModEntityTypes;
 import ooo.foooooooooooo.wickedpaintings.entity.WickedPaintingEntity;
 
 import java.util.List;
+
+import static ooo.foooooooooooo.wickedpaintings.util.ImageUtils.DEFAULT_TEX;
 
 public class WickedPaintingItem extends DecorationItem {
   public WickedPaintingItem(Settings settings) {
@@ -83,9 +84,8 @@ public class WickedPaintingItem extends DecorationItem {
       var nbt = itemStack.getOrCreateNbt();
 
       if (nbt.getString(NbtConstants.URL) == null || nbt.getString(NbtConstants.URL).isEmpty()) {
-        nbt.putString(NbtConstants.URL, "https://cdn.discordapp.com/attachments/902081288645804042/946165664345886800/FMS-3LjWQAY1cq9.png");
-
-        nbt.putString(NbtConstants.IMAGE_ID, ImageManager.DEFAULT_IMAGE_ID.toString());
+        nbt.putString(NbtConstants.URL, "");
+        nbt.putString(NbtConstants.IMAGE_ID, DEFAULT_TEX.toString());
       }
 
       // Clamp width and height to between 1 and 32
