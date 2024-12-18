@@ -7,8 +7,6 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.loader.impl.util.log.Log;
 import net.fabricmc.loader.impl.util.log.LogCategory;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -36,7 +34,7 @@ public class WickedPaintings implements ModInitializer {
     .build();
 
   public static final Logger LOGGERS = LoggerFactory.getLogger(WickedPaintings.class);
-  public static ScreenHandlerType<WickedGuiDescription> WICKED_SCREEN_HANDLER_TYPE;
+  public static final ScreenHandlerType<WickedGuiDescription> WICKED_SCREEN_HANDLER_TYPE = new ExtendedScreenHandlerType<>(WickedGuiDescription::new);
 
   @Override
   public void onInitialize() {
@@ -44,13 +42,6 @@ public class WickedPaintings implements ModInitializer {
     AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
 
     Registry.register(Registries.ITEM_GROUP, ITEM_GROUP_KEY, ITEM_GROUP);
-
-    WICKED_SCREEN_HANDLER_TYPE = new ExtendedScreenHandlerType<>((syncId, inventory, buf) -> {
-      var equipmentSlot = buf.readEnumConstant(EquipmentSlot.class);
-      var handStack = StackReference.of(inventory.player, equipmentSlot);
-      return new WickedGuiDescription(syncId, inventory, handStack);
-    });
-
     Registry.register(Registries.SCREEN_HANDLER, new Identifier(MOD_ID, "wicked_gui"), WICKED_SCREEN_HANDLER_TYPE);
 
     ModEntityTypes.registerEntityTypes();
