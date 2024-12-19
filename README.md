@@ -11,6 +11,7 @@ Maximum width and height of 32x32
 ## Config
 
 ![Config screen](./images/config.png)
+
 Disabling rendering causes the paintings to be completely invisible in the world
 
 ## Crafting
