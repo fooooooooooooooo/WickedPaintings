@@ -1,5 +1,7 @@
 package ooo.foooooooooooo.wickedpaintings.item;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EntityType;
@@ -36,6 +38,7 @@ public class WickedPaintingItem extends DecorationItem {
     super(ModEntityTypes.WICKED_PAINTING, settings);
   }
 
+  @Override
   public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
     player.openHandledScreen(createScreenHandlerFactory(player, hand));
     return TypedActionResult.success(player.getStackInHand(hand));
@@ -126,6 +129,7 @@ public class WickedPaintingItem extends DecorationItem {
     }
   }
 
+  @Environment(EnvType.CLIENT)
   @Override
   public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
     tooltip.add(Text.translatable(getOrCreateTranslationKey() + ".tooltip"));

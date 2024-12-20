@@ -1,5 +1,7 @@
 package ooo.foooooooooooo.wickedpaintings.util;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import ooo.foooooooooooo.wickedpaintings.WickedPaintings;
@@ -13,6 +15,7 @@ public class ImageUtils {
   public static final Identifier DEFAULT_TEX = new Identifier(WickedPaintings.MOD_ID, "textures/block/wicked_painting/default.png");
   public static final Identifier BLOCKED_TEX = new Identifier(WickedPaintings.MOD_ID, "textures/block/wicked_painting/blocked.png");
 
+  @Environment(EnvType.CLIENT)
   public static Identifier getOrLoadImage(Identifier id, String url) {
     var manager = MinecraftClient.getInstance().getTextureManager();
     var texture = manager.getOrDefault(id, null);

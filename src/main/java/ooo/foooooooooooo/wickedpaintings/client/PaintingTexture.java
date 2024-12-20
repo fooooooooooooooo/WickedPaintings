@@ -16,13 +16,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.http.HttpClient;
 import java.util.concurrent.CompletableFuture;
 
 import static ooo.foooooooooooo.wickedpaintings.util.ImageUtils.DEFAULT_TEX;
 
 public class PaintingTexture extends ResourceTexture {
-  private static final HttpClient CLIENT = HttpClient.newBuilder().build();
   private static final String USER_AGENT = "WickedPaintings (Minecraft Mod)";
 
   public boolean tooLarge = false;
@@ -57,7 +55,7 @@ public class PaintingTexture extends ResourceTexture {
     });
 
     if (this.loader == null) {
-      this.loader = CompletableFuture.runAsync(this::download, Util.getDownloadWorkerExecutor());
+      this.loader = CompletableFuture.runAsync(this::download, Util.getIoWorkerExecutor());
     }
   }
 

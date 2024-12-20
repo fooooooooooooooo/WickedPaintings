@@ -2,7 +2,15 @@
 //file:noinspection GroovyAssignabilityCheck
 
 plugins {
-  id 'fabric-loom' version '1.2-SNAPSHOT'
+  id 'java-library'
+  id 'fabric-loom' version '1.5-SNAPSHOT'
+}
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+  withSourcesJar()
 }
 
 archivesBaseName = project.archives_base_name
@@ -43,20 +51,10 @@ processResources {
   filesMatching("fabric.mod.json") {
     expand "version": project.version
   }
+
+  from 'LICENSE'
 }
 
-tasks.withType(JavaCompile).configureEach {
-  it.options.encoding = "UTF-8"
-  it.options.release = 17
-}
-
-java {
-  sourceCompatibility = JavaVersion.VERSION_17
-  targetCompatibility = JavaVersion.VERSION_17
-}
-
-jar {
-  from("LICENSE") {
-    rename { "${it}_${project.archivesBaseName}" }
-  }
+tasks.withType(JavaCompile) {
+  options.encoding = "UTF-8"
 }
