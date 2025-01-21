@@ -16,13 +16,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ooo.foooooooooooo.wickedpaintings.WickedPaintings"
+      "ooo.foooooooooooo.wickedpaintings.platform.fabric.WickedPaintingsFabric"
     ],
     "client": [
-      "ooo.foooooooooooo.wickedpaintings.WickedPaintingsClient"
+      "ooo.foooooooooooo.wickedpaintings.platform.fabric.WickedPaintingsFabricClient"
     ],
     "modmenu": [
-      "ooo.foooooooooooo.wickedpaintings.client.ModMenuIntegration"
+      "ooo.foooooooooooo.wickedpaintings.platform.fabric.client.config.ModConfigModMenuIntegration"
     ]
   },
   "depends": {

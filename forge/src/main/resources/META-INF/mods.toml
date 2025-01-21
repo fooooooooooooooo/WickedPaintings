@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+issueTrackerURL = "https://github.com/fooooooooooooooo/WickedPaintings/issues"
+license = "MIT"
+
+[[mods]]
+modId = "wicked_paintings"
+version = "${version}"
+displayName = "Wicked Paintings"
+authors = "fooooooooooooooo"
+description = '''
+WICKED paintings
+'''
+#logoFile = "assets/wicked_paintings/icon.png"
+
+[[dependencies.wicked_paintings]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.wicked_paintings]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.wicked_paintings]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.2.14,)"
+ordering = "AFTER"
+side = "BOTH"

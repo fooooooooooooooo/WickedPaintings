@@ -1,0 +1,10 @@
+architectury {
+  common rootProject.enabled_platforms.split(',')
+}
+
+dependencies {
+  // only @Environment annotations
+  modImplementation(libs.fabric.loader)
+
+  modImplementation(libs.architectury.common)
+}

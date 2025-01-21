@@ -1,9 +1,9 @@
 [versions]
 fabric-loader = "0.16.10"
 fabric-api = "0.92.3+1.20.1"
-forge = "47.0.3"
+forge = "1.20.1-47.0.3"
 
-slf4j-api = "2.0.1"
+architectury = "9.2.14"
 
 cloth-config = "11.1.136"
 modmenu = "7.1.0"
@@ -12,12 +12,12 @@ modmenu = "7.1.0"
 # Loader dependencies
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
-# todo: forge
+forge = { module = "net.minecraftforge:forge", version.ref = "forge" }
 
-# Non-mod library dependencies
-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j-api" }
+architectury-fabric = { module = "dev.architectury:architectury-fabric", version.ref = "architectury" }
+architectury-forge = { module = "dev.architectury:architectury-forge", version.ref = "architectury" }
+architectury-common = { module = "dev.architectury:architectury", version.ref = "architectury" }
 
 # Mod library dependencies
-cloth_config-forge = { module = "me.shedaniel.cloth:cloth-config-forge", version.ref = "cloth-config" }
-cloth_config-fabric = { module = "me.shedaniel.cloth:cloth-config-fabric", version.ref = "cloth-config" }
+cloth-config-fabric = { module = "me.shedaniel.cloth:cloth-config-fabric", version.ref = "cloth-config" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
