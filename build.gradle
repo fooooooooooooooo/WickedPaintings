@@ -1,4 +1,5 @@
 plugins {
+  id 'base'
   id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
   id 'architectury-plugin' version '3.4-SNAPSHOT'
   id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
@@ -55,4 +56,29 @@ subprojects {
   tasks.withType(JavaCompile).configureEach {
     it.options.release = 17
   }
+}
+
+tasks {
+  // Register a custom "collect jars" task that copies the Fabric and Forge mod jars
+  // into the root project's build/libs. This makes it easier for me to find them
+  // for testing and releasing.
+  def collectJars = tasks.register('collectJars', Copy) {
+    // Find the remapJar tasks of projects that aren't :common (so :fabric and :forge) and depend on them.
+    def tasks = subprojects.findAll { it.path != ':common' }.collect { it.tasks.named('remapJar') }
+    dependsOn tasks
+
+    // Copy the outputs of the tasks...
+    from tasks
+    // ...into build/libs.
+    into layout.buildDirectory.dir('libs')
+  }
+
+  // Set up assemble to depend on the collectJars task, so it gets run on gradlew build.
+  tasks.named('assemble') {
+    dependsOn collectJars
+  }
+
+  // This is for IDEA. If "classes" doesn't exist, it runs "assemble" - which
+  // builds the final project jars and is slow - when you press the hammer icon.
+  tasks.register('classes')
 }
